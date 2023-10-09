@@ -5,7 +5,7 @@ import '00_debug_selector.dart';
 
 void showDebugMenu() {
   if (globals.navigatorKey.currentContext == null) {
-    globals.log.e('showDebugMenu: navigatorKey.currentContext is null');
+    print('showDebugMenu: navigatorKey.currentContext is null');
     return;
   }
 

@@ -22,14 +22,17 @@ void showGeneralDebugMenu(BuildContext context) {
               'teamNumber',
               int.parse(_teamNumberCtrl.text),
             );
+            globals.teamNumber = int.parse(_teamNumberCtrl.text);
             globals.prefs.setInt(
               'pcNumber',
               int.parse(_pcNumberCtrl.text),
             );
+            globals.pcNumber = int.parse(_pcNumberCtrl.text);
             globals.prefs.setInt(
               'currentStage',
               int.parse(_stageCtrl.text),
             );
+            globals.currentStage = int.parse(_stageCtrl.text);
             Navigator.of(context).pop();
           },
           child: Text('Mentés'),

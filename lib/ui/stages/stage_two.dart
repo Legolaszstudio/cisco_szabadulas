@@ -2,6 +2,7 @@ import 'package:cisco_szabadulas/helpers/check_conf/is_ip_conf_right.dart';
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
+import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 
 class StageTwo extends StatefulWidget {
   const StageTwo({super.key});
@@ -41,6 +42,19 @@ class _StageTwoState extends State<StageTwo> {
           TextButton(
             child: Text('Ellenőrzés'),
             onPressed: () async {
+              String myIp = '192.168.${globals.teamNumber}.';
+              String teammateIp = '192.168.${globals.teamNumber}.';
+              if (globals.pcNumber == 1) {
+                myIp += '1';
+                teammateIp += '2';
+              } else {
+                myIp += '2';
+                teammateIp += '1';
+              }
+
+              print('My IP: ' + myIp);
+              print('Teammate IP: ' + teammateIp);
+
               // Check one
               bool result = await isIpConfRight('192.168.1.93');
               print('Result: ' + result.toString());

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -14,7 +13,6 @@ late int? pcNumber;
  *   ... Stage X;  
  */
 late int? currentStage = -1;
-Logger log = Logger();
 
 Future<void> initGlobals() async {
   prefs = await SharedPreferences.getInstance();
