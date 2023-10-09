@@ -13,6 +13,7 @@ void showGeneralDebugMenu(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
+      title: Text('General Debug Menu'),
       content: GeneralDebugMenu(),
       actions: [
         TextButton(
