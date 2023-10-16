@@ -26,6 +26,11 @@ class _StageTwoState extends State<StageTwo> {
       }
       globals.server = await startServer(stage_two_html());
       globals.httpServerVer = 2;
+      if (globals.stageTwoStart == 0) {
+        globals.stageTwoStart = DateTime.now().millisecondsSinceEpoch;
+        globals.prefs.setInt('stageTwoStart', globals.stageTwoStart);
+        print('Timing started for stage 2: ${globals.stageTwoStart}');
+      }
       if (globals.currentStage == 2.1) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(

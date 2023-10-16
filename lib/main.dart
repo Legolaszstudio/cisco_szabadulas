@@ -1,7 +1,7 @@
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 import 'package:cisco_szabadulas/ui/init_screen.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_two.dart';
-import 'package:cisco_szabadulas/ui/stages/stage_one.dart';
+import 'package:cisco_szabadulas/ui/stages/01/stage_one_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_zero.dart';
 import 'package:cisco_szabadulas/ui/start_screen.dart';
 import 'package:flutter/material.dart';

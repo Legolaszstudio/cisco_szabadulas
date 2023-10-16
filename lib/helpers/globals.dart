@@ -27,6 +27,12 @@ bool override_ip_check_permanent = false;
 bool override_http_check = false;
 bool override_http_check_permanent = false;
 
+//-------------- Timings ---------------
+int stageOneStart = 0;
+int stageOneEnd = 0;
+int stageTwoStart = 0;
+int stageTwoEnd = 0;
+
 Future<void> initGlobals() async {
   client.connectionTimeout = const Duration(seconds: 15);
 
@@ -35,4 +41,10 @@ Future<void> initGlobals() async {
   pcNumber = prefs.getInt('pcNumber');
   currentStage = prefs.getDouble('currentStage') ?? -1;
   networkInterface = prefs.getString('networkInterface') ?? 'Ethernet';
+
+  // Load timings
+  stageOneStart = prefs.getInt('stageOneStart') ?? 0;
+  stageOneEnd = prefs.getInt('stageOneEnd') ?? 0;
+  stageTwoStart = prefs.getInt('stageTwoStart') ?? 0;
+  stageTwoEnd = prefs.getInt('stageTwoEnd') ?? 0;
 }

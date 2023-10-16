@@ -1,5 +1,6 @@
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 
 /** End of stage two, wait for others */
 class StageTwoTwo extends StatefulWidget {
@@ -10,6 +11,18 @@ class StageTwoTwo extends StatefulWidget {
 }
 
 class _StageTwoTwoState extends State<StageTwoTwo> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (globals.stageTwoEnd == 0) {
+        globals.stageTwoEnd = DateTime.now().millisecondsSinceEpoch;
+        globals.prefs.setInt('stageTwoEnd', globals.stageTwoEnd);
+        print('Timing ended for stage 2: ${globals.stageTwoEnd}');
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

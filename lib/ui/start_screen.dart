@@ -1,5 +1,5 @@
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
-import 'package:cisco_szabadulas/ui/stages/stage_one.dart';
+import 'package:cisco_szabadulas/ui/stages/01/stage_one_zero.dart';
 import 'package:flutter/material.dart';
 import '../helpers/globals.dart' as globals;
 
