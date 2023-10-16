@@ -1,6 +1,6 @@
 import 'package:cisco_szabadulas/helpers/debug_menu/01_general.dart';
-import 'package:cisco_szabadulas/helpers/debug_menu/02_stage_one.dart';
-import 'package:cisco_szabadulas/helpers/debug_menu/03_stage_two.dart';
+import 'package:cisco_szabadulas/helpers/debug_menu/03_stage_one.dart';
+import 'package:cisco_szabadulas/helpers/debug_menu/02_overrides.dart';
 import 'package:flutter/material.dart';
 
 class DebugSelector extends StatelessWidget {
@@ -36,9 +36,9 @@ class DebugSelector extends StatelessWidget {
                   BorderSide(color: Colors.orange),
                 ),
               ),
-              child: Text('Stage One'),
+              child: Text('Overrides'),
               onPressed: () {
-                showStageOneDebugMenu(context);
+                showOverridesDebugMenu(context);
               },
             ),
           ),
@@ -52,9 +52,9 @@ class DebugSelector extends StatelessWidget {
                   BorderSide(color: Colors.orange),
                 ),
               ),
-              child: Text('Stage Two'),
+              child: Text('Stage One'),
               onPressed: () {
-                showStageTwoDebugMenu(context);
+                showStageOneDebugMenu(context);
               },
             ),
           ),

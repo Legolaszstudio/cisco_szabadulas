@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-void showStageTwoDebugMenu(BuildContext context) {
+void showStageOneDebugMenu(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text('Stage Two Debug Menu'),
-      content: StageTwoDebugMenu(),
+      title: Text('Stage One Debug Menu'),
+      content: StageOneDebugMenu(),
       actions: [
         TextButton(
           onPressed: () {
+            //TODO allow to redeploy 'emails'
             //TODO changes to save here
             Navigator.of(context).pop();
           },
@@ -19,14 +20,14 @@ void showStageTwoDebugMenu(BuildContext context) {
   );
 }
 
-class StageTwoDebugMenu extends StatefulWidget {
-  const StageTwoDebugMenu({super.key});
+class StageOneDebugMenu extends StatefulWidget {
+  const StageOneDebugMenu({super.key});
 
   @override
-  State<StageTwoDebugMenu> createState() => _StageTwoDebugMenuState();
+  State<StageOneDebugMenu> createState() => _StageOneDebugMenuState();
 }
 
-class _StageTwoDebugMenuState extends State<StageTwoDebugMenu> {
+class _StageOneDebugMenuState extends State<StageOneDebugMenu> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();

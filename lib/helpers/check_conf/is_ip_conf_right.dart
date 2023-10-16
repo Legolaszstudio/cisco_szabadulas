@@ -35,6 +35,13 @@ Future<String> isIpConfRight(
   String ipToConf, {
   String maskToConf = '255.255.255.0',
 }) async {
+  if (globals.override_ip_check) {
+    if (!globals.override_ip_check_permanent) {
+      globals.override_ip_check = false;
+    }
+    return 'OK';
+  }
+
   List<NetworkInterface> interfaces = await NetworkInterface.list();
   // Filter out ethernet interfaces
   interfaces = interfaces

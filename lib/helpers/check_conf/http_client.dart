@@ -11,13 +11,20 @@ HttpClient client = HttpClient();
 
 Future<bool> runHttpConnectivityCheck(BuildContext context,
     {required String destination, required int stageNum}) async {
+  if (globals.override_http_check) {
+    if (!globals.override_http_check_permanent) {
+      globals.override_http_check = false;
+    }
+    return true;
+  }
+
   String checkResult = await checkHttpConnectivity(destination, stageNum);
   if (checkResult == 'TimeoutException') {
     showSimpleAlert(
       context: context,
       title: 'Hiba - A másik gép nem válaszol',
       content:
-          'Minden jónak tűnik, de a másik géptől nem kapok választ 😢\nA másik gépen is minden jó?\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
+          'Minden jónak tűnik, de a másik géptől nem kapok választ 😢\nA másik gépen is minden jó? Jó helyre van minden bedugva?\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
     );
     return false;
   }

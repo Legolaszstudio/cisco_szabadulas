@@ -21,6 +21,12 @@ HttpServer? server;
 /** 0 = Offline, X = Stage X */
 int httpServerVer = 0;
 
+//-------------- Overrides --------------
+bool override_ip_check = false;
+bool override_ip_check_permanent = false;
+bool override_http_check = false;
+bool override_http_check_permanent = false;
+
 Future<void> initGlobals() async {
   client.connectionTimeout = const Duration(seconds: 15);
 
