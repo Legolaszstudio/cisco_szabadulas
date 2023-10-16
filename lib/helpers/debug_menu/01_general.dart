@@ -4,11 +4,13 @@ import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 TextEditingController _teamNumberCtrl = TextEditingController();
 TextEditingController _pcNumberCtrl = TextEditingController();
 TextEditingController _stageCtrl = TextEditingController();
+TextEditingController _networkInterfaceCtrl = TextEditingController();
 
 void showGeneralDebugMenu(BuildContext context) {
   _teamNumberCtrl.text = globals.teamNumber.toString();
   _pcNumberCtrl.text = globals.pcNumber.toString();
   _stageCtrl.text = globals.currentStage.toString();
+  _networkInterfaceCtrl.text = globals.networkInterface;
 
   showDialog(
     context: context,
@@ -28,11 +30,16 @@ void showGeneralDebugMenu(BuildContext context) {
               int.parse(_pcNumberCtrl.text),
             );
             globals.pcNumber = int.parse(_pcNumberCtrl.text);
-            globals.prefs.setInt(
+            globals.prefs.setDouble(
               'currentStage',
-              int.parse(_stageCtrl.text),
+              double.parse(_stageCtrl.text),
             );
-            globals.currentStage = int.parse(_stageCtrl.text);
+            globals.currentStage = double.parse(_stageCtrl.text);
+            globals.prefs.setString(
+              'networkInterface',
+              _networkInterfaceCtrl.text,
+            );
+            globals.networkInterface = _networkInterfaceCtrl.text;
             Navigator.of(context).pop();
           },
           child: Text('Mentés'),
@@ -73,6 +80,13 @@ class _GeneralDebugMenuState extends State<GeneralDebugMenu> {
             controller: _stageCtrl,
             decoration: const InputDecoration(
               labelText: 'Aktuális szint',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _networkInterfaceCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Hálózati interfész neve',
             ),
           ),
         ],

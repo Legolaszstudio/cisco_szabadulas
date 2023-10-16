@@ -51,16 +51,19 @@ class _InitScreenState extends State<InitScreen> {
                     actions: [
                       TextButton(
                         onPressed: () {
+                          //TODO: Check firewall and other permissions
+                          globals.teamNumber = int.parse(_teamNumberCtrl.text);
                           globals.prefs.setInt(
                             'teamNumber',
                             int.parse(_teamNumberCtrl.text),
                           );
+                          globals.pcNumber = int.parse(_pcNumberCtrl.text);
                           globals.prefs.setInt(
                             'pcNumber',
                             int.parse(_pcNumberCtrl.text),
                           );
 
-                          globals.prefs.setInt('currentStage', 0);
+                          globals.prefs.setDouble('currentStage', 0);
                           globals.currentStage = 0;
 
                           Navigator.of(context).pop();

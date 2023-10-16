@@ -66,7 +66,7 @@ class _StartScreenState extends State<StartScreen> {
                           onPressed: () {
                             Navigator.of(context).pop();
                             globals.currentStage = 1;
-                            globals.prefs.setInt('currentStage', 1);
+                            globals.prefs.setDouble('currentStage', 1);
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (context) => StageOne(),
