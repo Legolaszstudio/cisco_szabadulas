@@ -25,7 +25,7 @@ Future<String> getMask(String interf) async {
   String output = await process.stdout.transform(latin1.decoder).join();
   return utf8.decode(
     utf8.encode(output
-        .split('add address name="${globals.networkInterface}"')[1]
+        .split('add address name="$interf"')[1]
         .split('mask=')[1]
         .split('\n')[0]),
   );
@@ -46,13 +46,13 @@ Future<String> isIpConfRight(
   // Filter out ethernet interfaces
   interfaces = interfaces
       .where(
-        (element) => element.name.contains(globals.networkInterface),
+        (element) => element.name.startsWith(globals.networkInterface),
       )
       .toList();
   if (interfaces.isEmpty) {
     return 'NoInterface';
   } else if (interfaces.length > 1) {
-    return 'TooManyInterfaces';
+    return 'TooManyInterfaces ${interfaces.map((e) => e.name).join(', ')})}';
   }
 
   // Check ipv4 address configuration
@@ -96,7 +96,7 @@ Future<bool> runIpCheck(
   }
   print('runIpCheck Result: ' + result.toString());
 
-  if (result == 'NoInterface' || result == 'TooManyInterfaces') {
+  if (result == 'NoInterface' || result.startsWith('TooManyInterfaces')) {
     showSimpleAlert(
       context: context,
       title: 'Hiba - Az Interfész kereső hibába futott',
