@@ -67,6 +67,7 @@ Egy valamit jól vésetek eszetekbe: X.C.C.C
     );
   }
 
+  @override
   void dispose() {
     _timer.cancel();
     super.dispose();

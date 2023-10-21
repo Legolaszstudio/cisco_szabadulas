@@ -41,6 +41,7 @@ class _StageOneState extends State<StageOne> {
     super.initState();
   }
 
+  @override
   void dispose() {
     _timer.cancel();
     super.dispose();

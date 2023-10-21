@@ -13,6 +13,9 @@ class _InitScreenState extends State<InitScreen> {
   TextEditingController _teamNumberCtrl = TextEditingController();
   TextEditingController _pcNumberCtrl = TextEditingController(text: '1');
   TextEditingController _teamName = TextEditingController();
+  TextEditingController _interfaceName = TextEditingController(
+    text: globals.networkInterface,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +48,13 @@ class _InitScreenState extends State<InitScreen> {
                 labelText: 'Csapatnév',
               ),
             ),
+            SizedBox(height: 10),
+            TextFormField(
+              controller: _interfaceName,
+              decoration: const InputDecoration(
+                labelText: 'Hálózati interfész',
+              ),
+            ),
             SizedBox(height: 25),
             IconButton(
               color: Colors.orange,
@@ -54,7 +64,7 @@ class _InitScreenState extends State<InitScreen> {
                   builder: (context) => AlertDialog(
                     title: Text('Figyelem!'),
                     content: Text(
-                      'Helyesek az alábbi adatok?\n\nCsapatszám: ${_teamNumberCtrl.text}\nKomputer szám: ${_pcNumberCtrl.text}\nCsapatnév: ${_teamName.text}',
+                      'Helyesek az alábbi adatok?\n\nCsapatszám: ${_teamNumberCtrl.text}\nKomputer szám: ${_pcNumberCtrl.text}\nCsapatnév: ${_teamName.text}\nHálózati interfész: ${_interfaceName.text}',
                     ),
                     actions: [
                       TextButton(
@@ -73,6 +83,12 @@ class _InitScreenState extends State<InitScreen> {
 
                           globals.teamName = _teamName.text;
                           globals.prefs.setString('teamName', _teamName.text);
+
+                          globals.networkInterface = _interfaceName.text;
+                          globals.prefs.setString(
+                            'networkInterface',
+                            _interfaceName.text,
+                          );
 
                           globals.prefs.setDouble('currentStage', 0);
                           globals.currentStage = 0;
