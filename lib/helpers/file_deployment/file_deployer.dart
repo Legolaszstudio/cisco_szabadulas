@@ -1,5 +1,5 @@
 import 'dart:io' as io;
-import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:flutter/services.dart' show AssetManifest, ByteData, rootBundle;
 import 'dart:math';
 
 Future<void> fileDeployer() async {
@@ -13,6 +13,15 @@ Future<void> fileDeployer() async {
   String downloads = homeDir + '\\Downloads';
   String pictures = homeDir + '\\Pictures';
   String music = homeDir + '\\Music';
+  final assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+  final imageAssetsList = assetManifest
+      .listAssets()
+      .where((string) => string.startsWith('assets/01levelek/randomImages/'))
+      .toList();
+  final musicAssetsList = assetManifest
+      .listAssets()
+      .where((string) => string.startsWith('assets/01levelek/randomSounds/'))
+      .toList();
 
   /* Deploying first letter on desktop */
   print('Deploying first letter on desktop');
@@ -52,7 +61,19 @@ Future<void> fileDeployer() async {
   if (!picturesDir.existsSync()) {
     picturesDir.createSync();
   }
-  //TODO: Fill with random pictures
+
+  for (String imageAsset in imageAssetsList) {
+    String imageName = imageAsset.split('/').last;
+    io.File imageFile = io.File(pictures + '\\Screenshots\\$imageName');
+    if (imageFile.existsSync()) {
+      imageFile.deleteSync();
+    }
+    data = await rootBundle.load(imageAsset);
+    bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    await imageFile.writeAsBytes(bytes);
+    print('Deployed image $imageName.');
+  }
+
   io.File picturesFile = io.File(pictures + '\\Screenshots\\levél3.docx');
   if (picturesFile.existsSync()) {
     picturesFile.deleteSync();
@@ -75,7 +96,22 @@ Future<void> fileDeployer() async {
     }
     musicDir.createSync();
     print('Created album $i');
-    //TODO: Push some random music too
+    int randomNumOfMusic = Random().nextInt(10);
+    List<String> randomMusicAssets = List.from(musicAssetsList);
+    for (int j = 0; j < randomNumOfMusic; j++) {
+      String soundAsset = randomMusicAssets.removeAt(
+        Random().nextInt(randomMusicAssets.length),
+      );
+      String soundFile = soundAsset.split('/').last;
+      io.File imageFile = io.File(music + '\\Album$i\\$soundFile');
+      if (imageFile.existsSync()) {
+        imageFile.deleteSync();
+      }
+      data = await rootBundle.load(soundAsset);
+      bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      await imageFile.writeAsBytes(bytes);
+      print('Deployed sound for album$i $soundFile');
+    }
   }
   io.Directory musicDeploymentDir =
       io.Directory(music + '\\Album${Random().nextInt(numOfAlbs)}');
