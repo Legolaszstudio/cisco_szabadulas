@@ -17,7 +17,16 @@ class StageOneOne extends StatefulWidget {
 class _StageOneOneState extends State<StageOneOne> {
   late Timer _timer;
   String _timeLeftStr = '${globals.timeForStageOne}:00';
-  Widget hintWidget = SizedBox(height: 0, width: 0);
+  Widget hintWidget = Padding(
+    padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
+    child: Text(
+      '''
+(Segítség hamarosan)
+''',
+      style: TextStyle(fontSize: 15),
+      textAlign: TextAlign.center,
+    ),
+  );
   TextEditingController _passwordCtrl = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -27,6 +36,62 @@ class _StageOneOneState extends State<StageOneOne> {
       int timeLeft = endTime - DateTime.now().millisecondsSinceEpoch;
 
       _timeLeftStr = msToHumanStr(timeLeft);
+
+      if (timeLeft <= (globals.timeForStageOne - 12) * 60000) {
+        // 12 minute passed
+        hintWidget = Padding(
+          padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
+          child: Text(
+            '''
+Első levél: Asztalon
+Második levél: Letöltések között
+Harmadik levél: Képek között (Screenshot/Képernyőkép mappában)
+Negyedik levél: Zenék között (Valamelyik mappában)
+''',
+            style: TextStyle(fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+        );
+      } else if (timeLeft <= (globals.timeForStageOne - 10) * 60000) {
+        // 10 minute passed
+        hintWidget = Padding(
+          padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
+          child: Text(
+            '''
+Első levél: Asztalon
+Második levél: Letöltések között
+Harmadik levél: Képek között
+''',
+            style: TextStyle(fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+        );
+      } else if (timeLeft <= (globals.timeForStageOne - 8) * 60000) {
+        // 8 minute passed
+        hintWidget = Padding(
+          padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
+          child: Text(
+            '''
+Első levél: Asztalon
+Második levél: Letöltések között
+''',
+            style: TextStyle(fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+        );
+      } else if (timeLeft <= (globals.timeForStageOne - 5) * 60000) {
+        // 5 minute passed
+        hintWidget = Padding(
+          padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
+          child: Text(
+            '''
+Első levél: Asztalon
+''',
+            style: TextStyle(fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+        );
+      }
 
       if (timeLeft <= 0) {
         _timeLeftStr = '00:00';

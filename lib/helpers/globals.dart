@@ -31,7 +31,7 @@ bool override_http_check = false;
 bool override_http_check_permanent = false;
 
 //-------------- Timings ---------------
-int timeForStageOne = 20; //Minutes
+int timeForStageOne = 15; //Minutes
 int stageOneStart = 0;
 int stageOneEnd = 0;
 int stageTwoStart = 0;
