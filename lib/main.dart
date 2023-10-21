@@ -1,5 +1,7 @@
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 import 'package:cisco_szabadulas/ui/init_screen.dart';
+import 'package:cisco_szabadulas/ui/stages/01/stage_one_one.dart';
+import 'package:cisco_szabadulas/ui/stages/01/stage_one_two.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_two.dart';
 import 'package:cisco_szabadulas/ui/stages/01/stage_one_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_zero.dart';
@@ -31,6 +33,12 @@ class MyApp extends StatelessWidget {
         break;
       case 1:
         screen = StageOne();
+        break;
+      case 1.1:
+        screen = StageOneOne();
+        break;
+      case 1.2:
+        screen = StageOneTwo();
         break;
       case 2:
         screen = StageTwo();

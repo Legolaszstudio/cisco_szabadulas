@@ -10,6 +10,7 @@ const String devPassword = 'alma';
 late SharedPreferences prefs;
 late int? teamNumber;
 late int? pcNumber;
+late String? teamName = '';
 /** 
  *  -1 = Init;  
  *   0 = Get ready;  
@@ -28,6 +29,7 @@ bool override_http_check = false;
 bool override_http_check_permanent = false;
 
 //-------------- Timings ---------------
+int timeForStageOne = 20; //Minutes
 int stageOneStart = 0;
 int stageOneEnd = 0;
 int stageTwoStart = 0;
@@ -41,6 +43,7 @@ Future<void> initGlobals() async {
   pcNumber = prefs.getInt('pcNumber');
   currentStage = prefs.getDouble('currentStage') ?? -1;
   networkInterface = prefs.getString('networkInterface') ?? 'Ethernet';
+  teamName = prefs.getString('teamName') ?? '';
 
   // Load timings
   stageOneStart = prefs.getInt('stageOneStart') ?? 0;

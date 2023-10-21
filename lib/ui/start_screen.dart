@@ -32,6 +32,11 @@ class _StartScreenState extends State<StartScreen> {
               textAlign: TextAlign.center,
             ),
             Text(
+              globals.teamName ?? '',
+              style: const TextStyle(fontSize: 50),
+              textAlign: TextAlign.center,
+            ),
+            Text(
               'csapat (${globals.pcNumber.toString()}. gép)',
               style: const TextStyle(fontSize: 25),
               textAlign: TextAlign.center,
@@ -67,6 +72,9 @@ class _StartScreenState extends State<StartScreen> {
                             Navigator.of(context).pop();
                             globals.currentStage = 1;
                             globals.prefs.setDouble('currentStage', 1);
+                            globals.stageOneStart = 0;
+                            globals.stageOneEnd = 0;
+                            globals.prefs.setInt('stageOneEnd', 0);
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (context) => StageOne(),

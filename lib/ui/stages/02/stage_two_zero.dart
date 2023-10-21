@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:window_size/window_size.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
-
 import 'stage_two_one.dart';
 
 class StageTwo extends StatefulWidget {

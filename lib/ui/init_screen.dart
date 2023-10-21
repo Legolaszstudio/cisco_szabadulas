@@ -12,6 +12,7 @@ class InitScreen extends StatefulWidget {
 class _InitScreenState extends State<InitScreen> {
   TextEditingController _teamNumberCtrl = TextEditingController();
   TextEditingController _pcNumberCtrl = TextEditingController(text: '1');
+  TextEditingController _teamName = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,13 @@ class _InitScreenState extends State<InitScreen> {
                 labelText: 'Komputer szám',
               ),
             ),
+            SizedBox(height: 10),
+            TextFormField(
+              controller: _teamName,
+              decoration: const InputDecoration(
+                labelText: 'Csapatnév',
+              ),
+            ),
             SizedBox(height: 25),
             IconButton(
               color: Colors.orange,
@@ -46,7 +54,7 @@ class _InitScreenState extends State<InitScreen> {
                   builder: (context) => AlertDialog(
                     title: Text('Figyelem!'),
                     content: Text(
-                      'Helyesek az alábbi adatok?\n\nCsapatszám: ${_teamNumberCtrl.text}\nKomputer szám: ${_pcNumberCtrl.text}',
+                      'Helyesek az alábbi adatok?\n\nCsapatszám: ${_teamNumberCtrl.text}\nKomputer szám: ${_pcNumberCtrl.text}\nCsapatnév: ${_teamName.text}',
                     ),
                     actions: [
                       TextButton(
@@ -62,6 +70,9 @@ class _InitScreenState extends State<InitScreen> {
                             'pcNumber',
                             int.parse(_pcNumberCtrl.text),
                           );
+
+                          globals.teamName = _teamName.text;
+                          globals.prefs.setString('teamName', _teamName.text);
 
                           globals.prefs.setDouble('currentStage', 0);
                           globals.currentStage = 0;

@@ -87,6 +87,11 @@ Itt kellene írni arról, hogy hogyan a fallba bedugni a cuccokat, meg a rackbe
 
               globals.prefs.setDouble('currentStage', 2.2);
               globals.currentStage = 2.2;
+
+              globals.stageTwoEnd = DateTime.now().millisecondsSinceEpoch;
+              globals.prefs.setInt('stageTwoEnd', globals.stageTwoEnd);
+              print('Timing ended for stage 2: ${globals.stageTwoEnd}');
+
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => StageTwoTwo(),
