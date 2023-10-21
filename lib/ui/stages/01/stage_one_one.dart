@@ -17,6 +17,9 @@ class StageOneOne extends StatefulWidget {
 class _StageOneOneState extends State<StageOneOne> {
   late Timer _timer;
   String _timeLeftStr = '${globals.timeForStageOne}:00';
+  Widget hintWidget = SizedBox(height: 0, width: 0);
+  TextEditingController _passwordCtrl = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void updateTime() {
     setState(() {
@@ -27,14 +30,7 @@ class _StageOneOneState extends State<StageOneOne> {
 
       if (timeLeft <= 0) {
         _timeLeftStr = '00:00';
-        _timer.cancel();
-        globals.stageOneEnd = DateTime.now().millisecondsSinceEpoch;
-        globals.prefs.setInt('stageOneEnd', globals.stageOneEnd);
-        globals.currentStage = 1.2;
-        globals.prefs.setDouble('currentStage', 1.2);
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => StageOneTwo()),
-        );
+        goToNextStage(false);
         Future.delayed(Duration(seconds: 2)).then((value) {
           showSimpleAlert(
               context: globals.navigatorKey.currentContext!,
@@ -58,6 +54,17 @@ Egy valamit jól vésetek eszetekbe: X.C.C.C
       updateTime();
     });
     super.initState();
+  }
+
+  void goToNextStage(bool success) {
+    _timer.cancel();
+    globals.stageOneEnd = DateTime.now().millisecondsSinceEpoch;
+    globals.prefs.setInt('stageOneEnd', globals.stageOneEnd);
+    globals.currentStage = 1.2;
+    globals.prefs.setDouble('currentStage', 1.2);
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => StageOneTwo(success: success)),
+    );
   }
 
   void dispose() {
@@ -84,7 +91,67 @@ Egy valamit jól vésetek eszetekbe: X.C.C.C
           ),
         ],
       ),
-      body: Placeholder(),
+      body: ListView(
+        shrinkWrap: true,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
+            child: Text(
+              '''
+A gépeken találtok elszórva pár levelet, pontosan 4-et, melyeket az ilyen vészhelyzetek esetére rejtettem el. 😅
+Viszont direkt el vannak rejtve, hogy akárki ne találhassa meg őket.
+A feladatotok az, hogy megtaláljátok őket, és a kódot beírjátok ide alulra;
+''',
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          hintWidget,
+          Padding(
+            padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
+            child: Form(
+              key: _formKey,
+              child: TextFormField(
+                controller: _passwordCtrl,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Kód',
+                  errorStyle: TextStyle(color: Colors.red),
+                ),
+                onFieldSubmitted: (value) {
+                  if (_formKey.currentState!.validate()) {
+                    goToNextStage(true);
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Kérem a jelszót';
+                  }
+                  if (value.toLowerCase() != globals.stageOnePassword) {
+                    return 'Hibás jelszó';
+                  }
+                  return null;
+                },
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          FractionallySizedBox(
+            widthFactor: 0.5,
+            child: TextButton.icon(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  goToNextStage(true);
+                }
+              },
+              icon: Icon(Icons.key),
+              label: Text('Tovább'),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

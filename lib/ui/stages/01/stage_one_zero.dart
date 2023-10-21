@@ -61,7 +61,7 @@ class _StageOneState extends State<StageOne> {
         globals.currentStage = 1.2;
         globals.prefs.setDouble('currentStage', 1.2);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => StageOneTwo()),
+          MaterialPageRoute(builder: (context) => StageOneTwo(success: false)),
         );
         Future.delayed(Duration(seconds: 2)).then((value) {
           showSimpleAlert(

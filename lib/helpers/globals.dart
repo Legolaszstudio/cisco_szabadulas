@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cisco_szabadulas/helpers/check_conf/http_client.dart';
@@ -5,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
-const String devPassword = 'alma';
+final String devPassword = utf8.decode([97, 108, 109, 97]);
+final String stageOnePassword = utf8.decode([99, 105, 115, 99, 111]);
 
 late SharedPreferences prefs;
 late int? teamNumber;

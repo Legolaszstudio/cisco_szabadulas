@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         screen = StageOneOne();
         break;
       case 1.2:
-        screen = StageOneTwo();
+        screen = StageOneTwo(success: false);
         break;
       case 2:
         screen = StageTwo();

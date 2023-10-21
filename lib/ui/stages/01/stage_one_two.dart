@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 
 class StageOneTwo extends StatefulWidget {
-  const StageOneTwo({super.key});
+  const StageOneTwo({super.key, required bool success});
 
   @override
   State<StageOneTwo> createState() => _StageOneTwoState();
@@ -48,6 +48,7 @@ class _StageOneTwoState extends State<StageOneTwo> {
       ),
       body: ListView(
         children: [
+          //TODO: Felhasználni a success attributot
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
             child: Text(
