@@ -5,6 +5,7 @@ import 'package:cisco_szabadulas/ui/stages/01/stage_one_two.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_two.dart';
 import 'package:cisco_szabadulas/ui/stages/01/stage_one_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_zero.dart';
+import 'package:cisco_szabadulas/ui/stages/03/stage_three_zero.dart';
 import 'package:cisco_szabadulas/ui/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         break;
       case 2.2:
         screen = StageTwoTwo();
+        break;
+      case 3:
+        screen = StageThree();
         break;
     }
     return GlobalLoaderOverlay(

@@ -75,6 +75,7 @@ class DebugSelector extends StatelessWidget {
               },
             ),
           ),
+          //TODO: Factory default button (erase all prefs)
         ],
       ),
     );

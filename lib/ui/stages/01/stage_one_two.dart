@@ -109,7 +109,7 @@ Nagyon ügyes voltál, meg minden szépség. Ennyi idő volt kijutni az első st
               icon: Icon(Icons.next_plan),
               label: Text('Következő'),
             ),
-          )
+          ),
         ],
       ),
     );
