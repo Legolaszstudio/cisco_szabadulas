@@ -5,6 +5,8 @@ TextEditingController _stageOneStartCtrl = TextEditingController();
 TextEditingController _stageOneTimeCtrl = TextEditingController();
 TextEditingController _stageTwoStartCtrl = TextEditingController();
 TextEditingController _stageTwoTimeCtrl = TextEditingController();
+TextEditingController _stageThreeStartCtrl = TextEditingController();
+TextEditingController _stageThreeTimeCtrl = TextEditingController();
 
 void showTimingsDebugMenu(BuildContext context) {
   _stageOneStartCtrl.text = globals.stageOneStart.toString();
@@ -14,6 +16,10 @@ void showTimingsDebugMenu(BuildContext context) {
   _stageTwoStartCtrl.text = globals.stageTwoStart.toString();
   _stageTwoTimeCtrl.text =
       (globals.stageTwoEnd - globals.stageTwoStart).toString();
+
+  _stageThreeStartCtrl.text = globals.stageThreeStart.toString();
+  _stageThreeTimeCtrl.text =
+      (globals.stageThreeEnd - globals.stageThreeStart).toString();
 
   showDialog(
     context: context,
@@ -46,6 +52,18 @@ void showTimingsDebugMenu(BuildContext context) {
                 globals.stageTwoStart + int.parse(_stageTwoTimeCtrl.text);
             globals.prefs.setInt('stageTwoEnd', stageTwoEnd);
             globals.stageTwoEnd = stageTwoEnd;
+
+            // -------------------- Stage Three ------------------------
+            globals.prefs.setInt(
+              'stageThreeStart',
+              int.parse(_stageThreeStartCtrl.text),
+            );
+            globals.stageThreeStart = int.parse(_stageThreeStartCtrl.text);
+
+            int stageThreeEnd =
+                globals.stageThreeStart + int.parse(_stageThreeTimeCtrl.text);
+            globals.prefs.setInt('stageThreeEnd', stageThreeEnd);
+            globals.stageThreeEnd = stageThreeEnd;
 
             Navigator.of(context).pop();
           },
@@ -94,6 +112,20 @@ class _TimingsDebugMenuState extends State<TimingsDebugMenu> {
             controller: _stageTwoTimeCtrl,
             decoration: const InputDecoration(
               labelText: 'Stage 2 Time To Complete (ms)',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _stageThreeStartCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Stage 3 Start',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _stageThreeTimeCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Stage 3 Time To Complete (ms)',
             ),
           ),
         ],
