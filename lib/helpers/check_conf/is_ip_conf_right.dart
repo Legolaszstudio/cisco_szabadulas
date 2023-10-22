@@ -31,9 +31,37 @@ Future<String> getMask(String interf) async {
   );
 }
 
+Future<String> getGateway(String interf) async {
+  Process process = await Process.start(
+    'C:\\Windows\\system32\\netsh.exe',
+    ['interface', 'ip', 'dump'],
+  );
+  await Future.delayed(Duration(seconds: 1));
+  String output = await process.stdout.transform(latin1.decoder).join();
+  if (output.split('add route prefix=0.0.0.0/0 interface=\"$interf\"').length >
+      2) {
+    return 'MultipleGw';
+  }
+  if (output.split('add route prefix=0.0.0.0/0 interface=\"$interf\"').length <
+      2) {
+    return 'NoGw';
+  }
+  return utf8
+      .decode(
+        utf8.encode(output
+            .split('add route prefix=0.0.0.0/0 interface="$interf"')[1]
+            .split('nexthop=')[1]
+            .split(' ')[0]),
+      )
+      .split('.')
+      .map((e) => int.parse(e))
+      .join('.');
+}
+
 Future<String> isIpConfRight(
   String ipToConf, {
   String maskToConf = '255.255.255.0',
+  String? gatewayToConf,
 }) async {
   if (globals.override_ip_check) {
     if (!globals.override_ip_check_permanent) {
@@ -75,6 +103,14 @@ Future<String> isIpConfRight(
     return 'WrongMask ${maskResult}';
   }
 
+  if (gatewayToConf != null) {
+    String gatewayResult = await getGateway(interfaces[0].name);
+
+    if (gatewayToConf != gatewayResult) {
+      return 'WrongGateway ${gatewayResult}';
+    }
+  }
+
   return 'OK';
 }
 
@@ -83,6 +119,7 @@ Future<bool> runIpCheck(
   BuildContext context, {
   required String ipToCheck,
   String maskToCheck = '255.255.255.0',
+  String? gatewayToCheck,
 }) async {
   // Check one
   String result = 'Err';
@@ -90,6 +127,7 @@ Future<bool> runIpCheck(
     result = await isIpConfRight(
       ipToCheck,
       maskToConf: maskToCheck,
+      gatewayToConf: gatewayToCheck,
     );
   } catch (e) {
     result = 'Exception ${e}';
@@ -140,7 +178,37 @@ Future<bool> runIpCheck(
       context: context,
       title: 'Hiba - Nem jó maszkot/subnetet konfiguráltál',
       content:
-          'Semmi gond, nagy valószínúséggel csak elgépeltél valamit;\n\nA mask amit beállítottál: ${result.split(' ')[1]}\nA mask amit be kellett volna állítani: 255.255.255.0\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
+          'Semmi gond, nagy valószínúséggel csak elgépeltél valamit;\n\nA mask amit beállítottál: ${result.split(' ')[1]}\nA mask amit be kellett volna állítani: $maskToCheck\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
+    );
+    return false;
+  }
+
+  if (result.startsWith('WrongGateway MultipleGw')) {
+    showSimpleAlert(
+      context: context,
+      title: 'Hiba - Több átjáró van konfigurálva',
+      content:
+          'Lehet közötte van a jó átjáró is, de légyszi csak a jót állítsd be, köszi 🥺\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
+    );
+    return false;
+  }
+
+  if (result.startsWith('WrongGateway NoGw')) {
+    showSimpleAlert(
+      context: context,
+      title: 'Hiba - Nincs átjáró konfigurálva',
+      content:
+          'Nem látom, hogy lenne alapértelmezett átjáró, így nem tudok a többi hálózattal beszélgetni.\nLégyszi állítsd be 🥺\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
+    );
+    return false;
+  }
+
+  if (result.startsWith('WrongGateway')) {
+    showSimpleAlert(
+      context: context,
+      title: 'Hiba - Nem jó átjárót konfiguráltál',
+      content:
+          'Semmi gond, nagy valószínúséggel csak elgépeltél valamit;\n\nAz átjáró amit beállítottál: ${result.split(' ')[1]}\nAz átjáró amit be kellett volna állítani: $gatewayToCheck\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
     );
     return false;
   }
@@ -150,7 +218,7 @@ Future<bool> runIpCheck(
       context: context,
       title: 'Hiba - Hatalmas futásidejű hiba történt',
       content:
-          'Semmi gond, adj még egy próbát a dolognak, ha továbbra sem megy szólj a játékvezetőnek!\n\nRészletek\n\n${result.split(' ')[1]}',
+          'Semmi gond, adj még egy próbát a dolognak, ha továbbra sem megy szólj a játékvezetőnek!\n\nRészletek\n\n${result}',
     );
     return false;
   }
