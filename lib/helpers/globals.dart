@@ -39,6 +39,8 @@ int stageTwoStart = 0;
 int stageTwoEnd = 0;
 int stageThreeStart = 0;
 int stageThreeEnd = 0;
+int stageFourStart = 0;
+int stageFourEnd = 0;
 
 Future<void> initGlobals() async {
   client.connectionTimeout = const Duration(seconds: 15);
@@ -58,4 +60,6 @@ Future<void> initGlobals() async {
   stageTwoEnd = prefs.getInt('stageTwoEnd') ?? 0;
   stageThreeStart = prefs.getInt('stageThreeStart') ?? 0;
   stageThreeEnd = prefs.getInt('stageThreeEnd') ?? 0;
+  stageFourStart = prefs.getInt('stageFourStart') ?? 0;
+  stageFourEnd = prefs.getInt('stageFourEnd') ?? 0;
 }

@@ -11,13 +11,6 @@ HttpClient client = HttpClient();
 
 Future<bool> runHttpConnectivityCheck(BuildContext context,
     {required String destination, required int stageNum}) async {
-  if (globals.override_http_check) {
-    if (!globals.override_http_check_permanent) {
-      globals.override_http_check = false;
-    }
-    return true;
-  }
-
   String checkResult = await checkHttpConnectivity(destination, stageNum);
   if (checkResult == 'TimeoutException') {
     showSimpleAlert(
@@ -53,6 +46,13 @@ Future<bool> runHttpConnectivityCheck(BuildContext context,
 }
 
 Future<String> checkHttpConnectivity(String destination, int stageNum) async {
+  if (globals.override_http_check) {
+    if (!globals.override_http_check_permanent) {
+      globals.override_http_check = false;
+    }
+    return 'OK';
+  }
+
   String bodyResult = await getBody(destination);
   if (bodyResult == 'TimeoutException' || bodyResult.startsWith('Exception')) {
     return bodyResult;
@@ -68,6 +68,15 @@ Future<String> checkHttpConnectivity(String destination, int stageNum) async {
   switch (stageNum) {
     case 2:
       if (bodyResult.contains(getStageTwoCheckCode(
+        globals.teamNumber!,
+        otherPcNum,
+      ))) {
+        return 'OK';
+      } else {
+        return 'WrongBody ' + bodyResult;
+      }
+    case 3:
+      if (bodyResult.contains(getStageThreeCheckCode(
         globals.teamNumber!,
         otherPcNum,
       ))) {

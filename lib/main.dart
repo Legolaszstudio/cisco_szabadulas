@@ -2,7 +2,6 @@ import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 import 'package:cisco_szabadulas/ui/init_screen.dart';
 import 'package:cisco_szabadulas/ui/stages/01/stage_one_one.dart';
 import 'package:cisco_szabadulas/ui/stages/01/stage_one_two.dart';
-import 'package:cisco_szabadulas/ui/stages/02/stage_two_two.dart';
 import 'package:cisco_szabadulas/ui/stages/01/stage_one_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/03/stage_three_zero.dart';
@@ -42,16 +41,16 @@ class MyApp extends StatelessWidget {
         screen = StageOneTwo(success: false);
         break;
       case 2:
-        screen = StageTwo();
-        break;
       case 2.1:
+      case 2.2:
         // This is on purpose, do not change, it will redirect to the correct page, needed for http srv
         screen = StageTwo();
         break;
-      case 2.2:
-        screen = StageTwoTwo();
-        break;
       case 3:
+      case 3.1:
+      case 3.2:
+      case 3.3:
+        // This is on purpose, do not change, it will redirect to the correct page, needed for http srv
         screen = StageThree();
         break;
     }

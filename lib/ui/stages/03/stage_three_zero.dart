@@ -1,8 +1,13 @@
 import 'package:cisco_szabadulas/helpers/check_conf/http_server.dart';
+import 'package:cisco_szabadulas/helpers/check_conf/is_ip_conf_right.dart';
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/ui/html/stage_three_html.dart';
+import 'package:cisco_szabadulas/ui/stages/03/stage_three_one.dart';
+import 'package:cisco_szabadulas/ui/stages/03/stage_three_three.dart';
+import 'package:cisco_szabadulas/ui/stages/03/stage_three_two.dart';
 import 'package:flutter/material.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:window_size/window_size.dart';
 
 class StageThree extends StatefulWidget {
@@ -27,6 +32,27 @@ class _StageThreeState extends State<StageThree> {
         globals.prefs.setInt('stageThreeStart', globals.stageThreeStart);
         print('Timing started for stage 3: ${globals.stageThreeStart}');
       }
+      if (globals.currentStage == 3.1) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => StageThreeOne(),
+          ),
+        );
+      }
+      if (globals.currentStage == 3.2) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => StageThreeTwo(),
+          ),
+        );
+      }
+      if (globals.currentStage == 3.3) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => StageThreeThree(),
+          ),
+        );
+      }
     });
     super.initState();
   }
@@ -43,6 +69,45 @@ class _StageThreeState extends State<StageThree> {
             showDebugMenu();
           },
         ),
+      ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: Text('Ip konfiguráció rendben?'),
+          ),
+          FractionallySizedBox(
+            widthFactor: 0.5,
+            child: TextButton.icon(
+              icon: Icon(Icons.checklist),
+              label: Text('Ellenőrzés'),
+              onPressed: () async {
+                context.loaderOverlay.show();
+
+                String myIp =
+                    '192.168.${globals.teamNumber}.${globals.pcNumber}';
+
+                bool ipCheckResult = await runIpCheck(
+                  context,
+                  ipToCheck: myIp,
+                );
+                context.loaderOverlay.hide();
+
+                if (ipCheckResult == false) {
+                  return; // Config is not right, ipcheck function should handle error messages
+                }
+
+                globals.prefs.setDouble('currentStage', 3.1);
+                globals.currentStage = 3.1;
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => StageThreeOne(),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

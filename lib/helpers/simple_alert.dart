@@ -9,8 +9,10 @@ Future<void> showSimpleAlert({
     context: context,
     builder: (context) => AlertDialog(
       title: Text(title),
-      content: Text(
-        content,
+      content: SingleChildScrollView(
+        child: Text(
+          content,
+        ),
       ),
       actions: [
         TextButton(

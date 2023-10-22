@@ -40,64 +40,68 @@ Itt kellene írni arról, hogy hogyan a fallba bedugni a cuccokat, meg a rackbe
             ),
           ),
           SizedBox(height: 10),
-          TextButton(
-            child: Text('Ellenőrzés'),
-            onPressed: () async {
-              context.loaderOverlay.show();
+          FractionallySizedBox(
+            widthFactor: 0.5,
+            child: TextButton.icon(
+              icon: Icon(Icons.checklist),
+              label: Text('Ellenőrzés'),
+              onPressed: () async {
+                context.loaderOverlay.show();
 
-              String myIp = '192.168.${globals.teamNumber}.';
-              String otherPcIp = '192.168.${globals.teamNumber}.';
-              if (globals.pcNumber == 1) {
-                myIp += '1';
-                otherPcIp += '2';
-              } else {
-                myIp += '2';
-                otherPcIp += '1';
-              }
+                String myIp = '192.168.${globals.teamNumber}.';
+                String otherPcIp = '192.168.${globals.teamNumber}.';
+                if (globals.pcNumber == 1) {
+                  myIp += '1';
+                  otherPcIp += '2';
+                } else {
+                  myIp += '2';
+                  otherPcIp += '1';
+                }
 
-              String ipCheckResult = await isIpConfRight(myIp);
+                String ipCheckResult = await isIpConfRight(myIp);
 
-              if (ipCheckResult != 'OK') {
-                globals.prefs.setDouble('currentStage', 2.0);
-                globals.currentStage = 2.0;
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => StageTwo(),
-                  ),
-                );
-                showSimpleAlert(
-                  context: context,
-                  title: 'Hiba - Félrecsúszott valami az ip-vel',
-                  content: 'Adjunk ennek a dolognak még egy próbát! 😉',
+                if (ipCheckResult != 'OK') {
+                  globals.prefs.setDouble('currentStage', 2.0);
+                  globals.currentStage = 2.0;
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => StageTwo(),
+                    ),
+                  );
+                  showSimpleAlert(
+                    context: context,
+                    title: 'Hiba - Félrecsúszott valami az ip-vel',
+                    content: 'Adjunk ennek a dolognak még egy próbát! 😉',
+                  );
+                  context.loaderOverlay.hide();
+                  return; // IpConfig is not right, return to previous stage
+                }
+
+                bool httpCheckResult = await runHttpConnectivityCheck(
+                  context,
+                  destination: 'http://$otherPcIp/',
+                  stageNum: 2,
                 );
                 context.loaderOverlay.hide();
-                return; // IpConfig is not right, return to previous stage
-              }
 
-              bool httpCheckResult = await runHttpConnectivityCheck(
-                context,
-                destination: 'http://$otherPcIp/',
-                stageNum: 2,
-              );
-              context.loaderOverlay.hide();
+                if (httpCheckResult == false) {
+                  return; // Something is not right, httpcheck function should handle error messages
+                }
 
-              if (httpCheckResult == false) {
-                return; // Something is not right, httpcheck function should handle error messages
-              }
+                globals.prefs.setDouble('currentStage', 2.2);
+                globals.currentStage = 2.2;
 
-              globals.prefs.setDouble('currentStage', 2.2);
-              globals.currentStage = 2.2;
+                globals.stageTwoEnd = DateTime.now().millisecondsSinceEpoch;
+                globals.prefs.setInt('stageTwoEnd', globals.stageTwoEnd);
+                print('Timing ended for stage 2: ${globals.stageTwoEnd}');
 
-              globals.stageTwoEnd = DateTime.now().millisecondsSinceEpoch;
-              globals.prefs.setInt('stageTwoEnd', globals.stageTwoEnd);
-              print('Timing ended for stage 2: ${globals.stageTwoEnd}');
-
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => StageTwoTwo(),
-                ),
-              );
-            },
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => StageTwoTwo(),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
