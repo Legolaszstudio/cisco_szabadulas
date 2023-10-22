@@ -25,7 +25,6 @@ class _StageFourTwoState extends State<StageFourTwo> {
   );
   final terminalController = TerminalController();
   String lastLine = '';
-  String commandToBeSent = '';
   bool plinkConnected = false;
 
   @override
@@ -125,11 +124,24 @@ class _StageFourTwoState extends State<StageFourTwo> {
                       terminal.onOutput = (data) {
                         List<int> encoded = utf8.encode(data);
                         if (encoded.length == 1 && encoded[0] == 13) {
-                          print('Command to be sent: ${commandToBeSent}\n');
-                          //TODO: Sanity check here
-                          commandToBeSent = '';
+                          BufferLine lastLineTerminal =
+                              terminal.lines[terminal.lines.length - 1];
+                          String lastLineTerminalStr =
+                              lastLineTerminal.getText();
+                          if (lastLineTerminalStr.split('>').length > 1) {
+                            lastLineTerminalStr = lastLineTerminalStr
+                                .split('>')
+                                .sublist(1)
+                                .join('>');
+                          }
+                          if (lastLineTerminalStr.split('#').length > 1) {
+                            lastLineTerminalStr = lastLineTerminalStr
+                                .split('#')
+                                .sublist(1)
+                                .join('#');
+                          }
+                          print('Command to be sent: ${lastLineTerminalStr}\n');
                         }
-                        commandToBeSent += data;
                         serialPort!.stdin.write(
                           data,
                         );
@@ -143,11 +155,12 @@ class _StageFourTwoState extends State<StageFourTwo> {
                           lastLine = '';
                         }
                         lastLine += data;
-                        //stdout.write(data);
                       });
 
                       await Future.delayed(Duration(seconds: 1));
                       serialPort!.stdin.writeln(' ');
+                      serialPort!.stdin.writeln(' \n');
+                      globals.routerInit = false;
                       if (!globals.routerInit) {
                         serialPort!.stdin.writeln(' ');
                         await Future.delayed(Duration(seconds: 1));
@@ -176,11 +189,38 @@ class _StageFourTwoState extends State<StageFourTwo> {
                             content:
                                 'Nem sikerült a router-t inicializálni.\nSzólj a játékvezetőnek lécci 🥺',
                           );
+                          for (int i = 0; i <= 20; i++) {
+                            terminal.keyInput(TerminalKey.returnKey);
+                          }
                           return;
                         }
 
+                        for (int i = 0; i <= 20; i++) {
+                          terminal.keyInput(TerminalKey.returnKey);
+                        }
+
+                        terminal.textInput('enable');
+                        terminal.keyInput(TerminalKey.returnKey);
+                        terminal.textInput('conf t');
+                        terminal.keyInput(TerminalKey.returnKey);
+                        terminal.textInput('no ip domain-lookup');
+                        terminal.keyInput(TerminalKey.returnKey);
+                        terminal.textInput('line con 0');
+                        terminal.keyInput(TerminalKey.returnKey);
+                        terminal.textInput('logging synchronous');
+                        terminal.keyInput(TerminalKey.returnKey);
+                        terminal.textInput('end');
+                        terminal.keyInput(TerminalKey.returnKey);
+                        terminal.textInput('exit');
+                        terminal.keyInput(TerminalKey.returnKey);
+                        terminal.keyInput(TerminalKey.returnKey);
+
                         globals.routerInit = true;
                         globals.prefs.setBool('routerInit', true);
+                      } else {
+                        for (int i = 0; i <= 20; i++) {
+                          terminal.keyInput(TerminalKey.returnKey);
+                        }
                       }
 
                       context.loaderOverlay.hide();
