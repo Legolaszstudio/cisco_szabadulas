@@ -70,12 +70,7 @@ Itt kellene írni arról, hogy hogyan és miért kell statikus címet beírni
             onPressed: () async {
               context.loaderOverlay.show();
 
-              String myIp = '192.168.${globals.teamNumber}.';
-              if (globals.pcNumber == 1) {
-                myIp += '1';
-              } else {
-                myIp += '2';
-              }
+              String myIp = '192.168.${globals.teamNumber}.${globals.pcNumber}';
 
               bool ipCheckResult = await runIpCheck(
                 context,

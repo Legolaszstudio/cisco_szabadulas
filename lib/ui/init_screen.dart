@@ -12,10 +12,11 @@ class InitScreen extends StatefulWidget {
 class _InitScreenState extends State<InitScreen> {
   TextEditingController _teamNumberCtrl = TextEditingController();
   TextEditingController _pcNumberCtrl = TextEditingController(text: '1');
-  TextEditingController _teamName = TextEditingController();
-  TextEditingController _interfaceName = TextEditingController(
+  TextEditingController _teamNameCtrl = TextEditingController();
+  TextEditingController _interfaceNameCtrl = TextEditingController(
     text: globals.networkInterface,
   );
+  TextEditingController _numberOfTeamsCtrl = TextEditingController(text: '7');
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +44,23 @@ class _InitScreenState extends State<InitScreen> {
             ),
             SizedBox(height: 10),
             TextFormField(
-              controller: _teamName,
+              controller: _teamNameCtrl,
               decoration: const InputDecoration(
                 labelText: 'Csapatnév',
               ),
             ),
             SizedBox(height: 10),
             TextFormField(
-              controller: _interfaceName,
+              controller: _interfaceNameCtrl,
               decoration: const InputDecoration(
                 labelText: 'Hálózati interfész',
+              ),
+            ),
+            SizedBox(height: 10),
+            TextFormField(
+              controller: _numberOfTeamsCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Csapatok száma',
               ),
             ),
             SizedBox(height: 25),
@@ -64,7 +72,7 @@ class _InitScreenState extends State<InitScreen> {
                   builder: (context) => AlertDialog(
                     title: Text('Figyelem!'),
                     content: Text(
-                      'Helyesek az alábbi adatok?\n\nCsapatszám: ${_teamNumberCtrl.text}\nKomputer szám: ${_pcNumberCtrl.text}\nCsapatnév: ${_teamName.text}\nHálózati interfész: ${_interfaceName.text}',
+                      'Helyesek az alábbi adatok?\n\nCsapatszám: ${_teamNumberCtrl.text}\nKomputer szám: ${_pcNumberCtrl.text}\nCsapatnév: ${_teamNameCtrl.text}\nHálózati interfész: ${_interfaceNameCtrl.text}\nCsapatok száma: ${_numberOfTeamsCtrl.text}',
                     ),
                     actions: [
                       TextButton(
@@ -81,13 +89,21 @@ class _InitScreenState extends State<InitScreen> {
                             int.parse(_pcNumberCtrl.text),
                           );
 
-                          globals.teamName = _teamName.text;
-                          globals.prefs.setString('teamName', _teamName.text);
+                          globals.teamName = _teamNameCtrl.text;
+                          globals.prefs
+                              .setString('teamName', _teamNameCtrl.text);
 
-                          globals.networkInterface = _interfaceName.text;
+                          globals.networkInterface = _interfaceNameCtrl.text;
                           globals.prefs.setString(
                             'networkInterface',
-                            _interfaceName.text,
+                            _interfaceNameCtrl.text,
+                          );
+
+                          globals.numberOfTeams =
+                              int.parse(_numberOfTeamsCtrl.text);
+                          globals.prefs.setInt(
+                            'numberOfTeams',
+                            int.parse(_numberOfTeamsCtrl.text),
                           );
 
                           globals.prefs.setDouble('currentStage', 0);

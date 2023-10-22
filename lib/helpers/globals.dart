@@ -12,6 +12,7 @@ final String stageOnePassword = utf8.decode([99, 105, 115, 99, 111]);
 late SharedPreferences prefs;
 late int? teamNumber;
 late int? pcNumber;
+late int? numberOfTeams;
 late String? teamName = '';
 /** 
  *  -1 = Init;  
@@ -48,6 +49,7 @@ Future<void> initGlobals() async {
   currentStage = prefs.getDouble('currentStage') ?? -1;
   networkInterface = prefs.getString('networkInterface') ?? 'Ethernet';
   teamName = prefs.getString('teamName') ?? '';
+  numberOfTeams = prefs.getInt('numberOfTeams') ?? 7;
 
   // Load timings
   stageOneStart = prefs.getInt('stageOneStart') ?? 0;

@@ -1,4 +1,6 @@
+import 'package:cisco_szabadulas/helpers/check_conf/http_server.dart';
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
+import 'package:cisco_szabadulas/ui/html/stage_three_html.dart';
 import 'package:flutter/material.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 import 'package:window_size/window_size.dart';
@@ -18,7 +20,7 @@ class _StageThreeState extends State<StageThree> {
       if (globals.httpServerVer != 0) {
         await globals.server?.close();
       }
-      //globals.server = await startServer(stage_two_html());
+      globals.server = await startServer(stage_three_html());
       globals.httpServerVer = 3;
       if (globals.stageThreeStart == 0) {
         globals.stageThreeStart = DateTime.now().millisecondsSinceEpoch;
