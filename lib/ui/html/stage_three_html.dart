@@ -14,6 +14,6 @@ String stage_three_html() {
 <p>
 $otherPcLinks
 </p>
-<!-- Ellenőrő kód: d94164e7-1613-4770-8872-cf4a34e33abb-0x${globals.teamNumber}${globals.pcNumber} -->
+<!-- Ellenőrző kód: d94164e7-1613-4770-8872-cf4a34e33abb-0x${globals.teamNumber}${globals.pcNumber} -->
 ''';
 }
