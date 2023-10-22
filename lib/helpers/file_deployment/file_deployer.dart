@@ -23,6 +23,22 @@ Future<void> fileDeployer() async {
       .where((string) => string.startsWith('assets/01levelek/randomSounds/'))
       .toList();
 
+  /* Deploy plink for serial comms to temp */
+  print('Deploying plink for serial comms to temp');
+  io.Directory tempDir = io.Directory(io.Directory.systemTemp.path + '\\plink');
+  if (!tempDir.existsSync()) {
+    tempDir.createSync();
+  }
+  io.File tempFile = io.File(tempDir.path + '\\plink.exe');
+  if (tempFile.existsSync()) {
+    tempFile.deleteSync();
+  }
+  ByteData plinkExe = await rootBundle.load('assets/plink.exe');
+  List<int> plinkBytes = plinkExe.buffer
+      .asUint8List(plinkExe.offsetInBytes, plinkExe.lengthInBytes);
+  await tempFile.writeAsBytes(plinkBytes);
+  print('Deployed plink to temp.');
+
   /* Deploying first letter on desktop */
   print('Deploying first letter on desktop');
   io.Directory desktopDir = io.Directory(desktop + '\\Ne Nézd Meg!');

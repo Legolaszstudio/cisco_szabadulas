@@ -13,8 +13,8 @@
 3.2: Jah, ez /16-os maszk 😅
 3.3: Timing kiírása, nincs kire várni, csak egyszerre tudják befejezni...
 
-4.0: Új statikus ip címek -> Default gateway
-4.1: Összekötetés
+4.0: Összekötetés
+4.1: Új statikus ip címek -> Default gateway
 4.2: Router konfiguráció
 4.3: Testing
 4.4: Pihi, bevárni a többieket

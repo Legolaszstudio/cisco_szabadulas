@@ -5,12 +5,14 @@ TextEditingController _teamNumberCtrl = TextEditingController();
 TextEditingController _pcNumberCtrl = TextEditingController();
 TextEditingController _stageCtrl = TextEditingController();
 TextEditingController _networkInterfaceCtrl = TextEditingController();
+TextEditingController _comPortCtrl = TextEditingController();
 
 void showGeneralDebugMenu(BuildContext context) {
   _teamNumberCtrl.text = globals.teamNumber.toString();
   _pcNumberCtrl.text = globals.pcNumber.toString();
   _stageCtrl.text = globals.currentStage.toString();
   _networkInterfaceCtrl.text = globals.networkInterface;
+  _comPortCtrl.text = globals.comPort;
 
   showDialog(
     context: context,
@@ -40,6 +42,11 @@ void showGeneralDebugMenu(BuildContext context) {
               _networkInterfaceCtrl.text,
             );
             globals.networkInterface = _networkInterfaceCtrl.text;
+            globals.prefs.setString(
+              'comPort',
+              _comPortCtrl.text,
+            );
+            globals.comPort = _comPortCtrl.text;
             Navigator.of(context).pop();
           },
           child: Text('Mentés'),
@@ -87,6 +94,13 @@ class _GeneralDebugMenuState extends State<GeneralDebugMenu> {
             controller: _networkInterfaceCtrl,
             decoration: const InputDecoration(
               labelText: 'Hálózati interfész neve',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _comPortCtrl,
+            decoration: const InputDecoration(
+              labelText: 'COM port',
             ),
           ),
         ],

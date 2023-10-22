@@ -17,6 +17,7 @@ class _InitScreenState extends State<InitScreen> {
     text: globals.networkInterface,
   );
   TextEditingController _numberOfTeamsCtrl = TextEditingController(text: '7');
+  TextEditingController _comPortCtrl = TextEditingController(text: 'COM3');
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +64,13 @@ class _InitScreenState extends State<InitScreen> {
                 labelText: 'Csapatok száma',
               ),
             ),
+            SizedBox(height: 10),
+            TextFormField(
+              controller: _comPortCtrl,
+              decoration: const InputDecoration(
+                labelText: 'COM port',
+              ),
+            ),
             SizedBox(height: 25),
             IconButton(
               color: Colors.orange,
@@ -72,7 +80,7 @@ class _InitScreenState extends State<InitScreen> {
                   builder: (context) => AlertDialog(
                     title: Text('Figyelem!'),
                     content: Text(
-                      'Helyesek az alábbi adatok?\n\nCsapatszám: ${_teamNumberCtrl.text}\nKomputer szám: ${_pcNumberCtrl.text}\nCsapatnév: ${_teamNameCtrl.text}\nHálózati interfész: ${_interfaceNameCtrl.text}\nCsapatok száma: ${_numberOfTeamsCtrl.text}',
+                      'Helyesek az alábbi adatok?\n\nCsapatszám: ${_teamNumberCtrl.text}\nKomputer szám: ${_pcNumberCtrl.text}\nCsapatnév: ${_teamNameCtrl.text}\nHálózati interfész: ${_interfaceNameCtrl.text}\nCsapatok száma: ${_numberOfTeamsCtrl.text}\nCOM port: ${_comPortCtrl.text}',
                     ),
                     actions: [
                       TextButton(
@@ -104,6 +112,12 @@ class _InitScreenState extends State<InitScreen> {
                           globals.prefs.setInt(
                             'numberOfTeams',
                             int.parse(_numberOfTeamsCtrl.text),
+                          );
+
+                          globals.comPort = _comPortCtrl.text;
+                          globals.prefs.setString(
+                            'comPort',
+                            _comPortCtrl.text,
                           );
 
                           globals.prefs.setDouble('currentStage', 0);

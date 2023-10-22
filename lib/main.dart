@@ -5,6 +5,7 @@ import 'package:cisco_szabadulas/ui/stages/01/stage_one_two.dart';
 import 'package:cisco_szabadulas/ui/stages/01/stage_one_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/03/stage_three_zero.dart';
+import 'package:cisco_szabadulas/ui/stages/04/stage_four_zero.dart';
 import 'package:cisco_szabadulas/ui/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -52,6 +53,12 @@ class MyApp extends StatelessWidget {
       case 3.3:
         // This is on purpose, do not change, it will redirect to the correct page, needed for http srv
         screen = StageThree();
+        break;
+      case 4:
+      case 4.1:
+      case 4.2:
+        // This is on purpose, do not change, it will redirect to the correct page, needed for http srv
+        screen = StageFour();
         break;
     }
     return GlobalLoaderOverlay(

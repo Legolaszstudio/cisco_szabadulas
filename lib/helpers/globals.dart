@@ -21,6 +21,8 @@ late String? teamName = '';
  */
 late double? currentStage = -1;
 String networkInterface = 'Ethernet';
+String comPort = 'COM3';
+bool routerInit = false;
 HttpServer? server;
 /** 0 = Offline, X = Stage X */
 int httpServerVer = 0;
@@ -52,6 +54,8 @@ Future<void> initGlobals() async {
   networkInterface = prefs.getString('networkInterface') ?? 'Ethernet';
   teamName = prefs.getString('teamName') ?? '';
   numberOfTeams = prefs.getInt('numberOfTeams') ?? 7;
+  comPort = prefs.getString('comPort') ?? 'COM3';
+  routerInit = prefs.getBool('routerInit') ?? false;
 
   // Load timings
   stageOneStart = prefs.getInt('stageOneStart') ?? 0;
