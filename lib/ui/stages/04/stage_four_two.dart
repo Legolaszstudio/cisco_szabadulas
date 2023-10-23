@@ -160,7 +160,6 @@ class _StageFourTwoState extends State<StageFourTwo> {
                       await Future.delayed(Duration(seconds: 1));
                       serialPort!.stdin.writeln(' ');
                       serialPort!.stdin.writeln(' \n');
-                      globals.routerInit = false;
                       if (!globals.routerInit) {
                         serialPort!.stdin.writeln(' ');
                         await Future.delayed(Duration(seconds: 1));
