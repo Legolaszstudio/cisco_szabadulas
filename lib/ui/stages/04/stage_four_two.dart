@@ -128,11 +128,22 @@ class _StageFourTwoState extends State<StageFourTwo> {
 
                       terminal.onOutput = (data) {
                         List<int> encoded = utf8.encode(data);
-                        if (encoded.length == 1 && encoded[0] == 13) {
+                        String encodedStr = encoded.join(',');
+                        if ('13,10'.allMatches(encodedStr).length > 1 &&
+                            globals.sanitizeInput) {
+                          terminal.write('\r\nMultilining is disabled!\n\r');
+                          return;
+                        }
+                        if (((encoded.length == 1 && encoded[0] == 13) ||
+                                encodedStr.endsWith('13,10')) &&
+                            globals.sanitizeInput) {
                           BufferLine lastLineTerminal =
                               terminal.lines[terminal.lines.length - 1];
                           String lastLineTerminalStr =
                               lastLineTerminal.getText();
+                          if (encodedStr.endsWith('13,10')) {
+                            lastLineTerminalStr += data;
+                          }
                           if (lastLineTerminalStr.split('>').length > 1) {
                             lastLineTerminalStr = lastLineTerminalStr
                                 .split('>')
@@ -145,6 +156,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                                 .sublist(1)
                                 .join('#');
                           }
+                          lastLineTerminalStr = lastLineTerminalStr.trim();
                           print('Command to be sent: ${lastLineTerminalStr}\n');
                         }
                         serialPort!.stdin.write(
@@ -203,6 +215,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                           terminal.keyInput(TerminalKey.returnKey);
                         }
 
+                        globals.sanitizeInput = false;
                         sendCommand('enable');
                         sendCommand('conf t');
                         sendCommand('no ip domain-lookup');
@@ -215,6 +228,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                         sendCommand('exit');
                         terminal.keyInput(TerminalKey.returnKey);
 
+                        globals.sanitizeInput = true;
                         globals.routerInit = true;
                         globals.prefs.setBool('routerInit', true);
                       } else {
