@@ -23,6 +23,7 @@ late double? currentStage = -1;
 String networkInterface = 'Ethernet';
 String comPort = 'COM3';
 bool routerInit = false;
+bool sanitizeInput = true;
 HttpServer? server;
 /** 0 = Offline, X = Stage X */
 int httpServerVer = 0;

@@ -33,6 +33,11 @@ class _StageFourTwoState extends State<StageFourTwo> {
     super.dispose();
   }
 
+  void sendCommand(String cmd) {
+    terminal.textInput(cmd);
+    terminal.keyInput(TerminalKey.returnKey);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,20 +203,16 @@ class _StageFourTwoState extends State<StageFourTwo> {
                           terminal.keyInput(TerminalKey.returnKey);
                         }
 
-                        terminal.textInput('enable');
-                        terminal.keyInput(TerminalKey.returnKey);
-                        terminal.textInput('conf t');
-                        terminal.keyInput(TerminalKey.returnKey);
-                        terminal.textInput('no ip domain-lookup');
-                        terminal.keyInput(TerminalKey.returnKey);
-                        terminal.textInput('line con 0');
-                        terminal.keyInput(TerminalKey.returnKey);
-                        terminal.textInput('logging synchronous');
-                        terminal.keyInput(TerminalKey.returnKey);
-                        terminal.textInput('end');
-                        terminal.keyInput(TerminalKey.returnKey);
-                        terminal.textInput('exit');
-                        terminal.keyInput(TerminalKey.returnKey);
+                        sendCommand('enable');
+                        sendCommand('conf t');
+                        sendCommand('no ip domain-lookup');
+                        sendCommand(
+                          'hostname Csapat${globals.teamNumber}Router',
+                        );
+                        sendCommand('line con 0');
+                        sendCommand('logging synchronous');
+                        sendCommand('end');
+                        sendCommand('exit');
                         terminal.keyInput(TerminalKey.returnKey);
 
                         globals.routerInit = true;
