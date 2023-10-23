@@ -38,6 +38,10 @@ class _StageFourTwoState extends State<StageFourTwo> {
     terminal.keyInput(TerminalKey.returnKey);
   }
 
+  void deleteLastLine() {
+    terminal.keyInput(TerminalKey.keyC, ctrl: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,6 +136,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                         if ('13,10'.allMatches(encodedStr).length > 1 &&
                             globals.sanitizeInput) {
                           terminal.write('\r\nMultilining is disabled!\n\r');
+                          deleteLastLine();
                           return;
                         }
                         if (((encoded.length == 1 && encoded[0] == 13) ||
@@ -144,6 +149,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                           if (encodedStr.endsWith('13,10')) {
                             lastLineTerminalStr += data;
                           }
+                          String lastLineOg = lastLineTerminalStr;
                           if (lastLineTerminalStr.split('>').length > 1) {
                             lastLineTerminalStr = lastLineTerminalStr
                                 .split('>')
@@ -158,6 +164,14 @@ class _StageFourTwoState extends State<StageFourTwo> {
                           }
                           lastLineTerminalStr = lastLineTerminalStr.trim();
                           print('Command to be sent: ${lastLineTerminalStr}\n');
+                          if (isUnsafeCommand(
+                            lastLineTerminalStr.toLowerCase(),
+                            lastLineOg.toLowerCase(),
+                            terminal,
+                          )) {
+                            deleteLastLine();
+                            return;
+                          }
                         }
                         serialPort!.stdin.write(
                           data,
