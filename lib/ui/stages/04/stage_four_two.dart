@@ -4,6 +4,7 @@ import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 import 'package:cisco_szabadulas/helpers/serial.dart';
 import 'package:cisco_szabadulas/helpers/simple_alert.dart';
+import 'package:cisco_szabadulas/ui/widgets/command_tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -11,6 +12,9 @@ import 'package:serial_port_win32/serial_port_win32.dart';
 import 'package:xterm/xterm.dart';
 
 Process? serialPort;
+List<Widget> stepsToConfigure = [
+  CommandTutorial('enable', 'Belépni rendszergazda módba'),
+];
 
 class StageFourTwo extends StatefulWidget {
   const StageFourTwo({super.key});
@@ -26,6 +30,19 @@ class _StageFourTwoState extends State<StageFourTwo> {
   final terminalController = TerminalController();
   String lastLine = '';
   bool plinkConnected = false;
+  int currentStep = 0;
+
+  @override
+  void initState() {
+    currentStep = 0;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (globals.pcNumber != 1) {
+        terminal.write('Ez most nem működik\n');
+        terminal.write('A másik gépen tudjátok a routert beállítani.\n');
+      }
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -188,7 +205,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                         lastLine += data;
                       });
 
-                      await Future.delayed(Duration(seconds: 1));
+                      await Future.delayed(Duration(seconds: 2));
                       serialPort!.stdin.writeln(' ');
                       serialPort!.stdin.writeln(' \n');
                       if (!globals.routerInit) {
@@ -238,6 +255,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                         );
                         sendCommand('line con 0');
                         sendCommand('logging synchronous');
+                        sendCommand('no exec-timeout');
                         sendCommand('end');
                         sendCommand('exit');
                         terminal.keyInput(TerminalKey.returnKey);
@@ -255,7 +273,10 @@ class _StageFourTwoState extends State<StageFourTwo> {
                     },
                   ),
                 )
-              : SizedBox(),
+              : Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Text('Most csak az első gépen van feladat.'),
+                ),
           SizedBox(height: 30),
           FractionallySizedBox(
             widthFactor: 0.8,
@@ -265,6 +286,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                 terminal,
                 controller: terminalController,
                 autofocus: true,
+                readOnly: globals.pcNumber != 1,
                 backgroundOpacity: 0.7,
                 onSecondaryTapDown: (details, offset) async {
                   final selection = terminalController.selection;
@@ -283,6 +305,57 @@ class _StageFourTwoState extends State<StageFourTwo> {
               ),
             ),
           ),
+          SizedBox(height: 25),
+          globals.pcNumber == 1
+              ? Text(
+                  'Az alábbi parancsokat segítségével kellene a routert működésre bírni:',
+                  textAlign: TextAlign.center,
+                )
+              : SizedBox(),
+          SizedBox(height: 25),
+          globals.pcNumber == 1
+              ? Wrap(
+                  alignment: WrapAlignment.center,
+                  runAlignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    FractionallySizedBox(
+                      widthFactor: 0.2,
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            if (currentStep != 0) {
+                              currentStep--;
+                            }
+                          });
+                        },
+                        child: Text('Vissza'),
+                      ),
+                    ),
+                    stepsToConfigure[currentStep],
+                    FractionallySizedBox(
+                      widthFactor: 0.2,
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            if (currentStep != stepsToConfigure.length - 1) {
+                              currentStep++;
+                            }
+                          });
+                        },
+                        child: Text('Tovább'),
+                      ),
+                    ),
+                  ],
+                )
+              : SizedBox(),
+          SizedBox(height: 25),
+          globals.pcNumber == 1
+              ? Text(
+                  'Parancsokat az ENTER lenyomásával lehet elküldeni.\nSegítséget a \'?\' gomb lenyomásával kaphatsz.\nHa elkezdesz gépelni egy parancsot, akkor azt a TAB lenyomásával be tudod fejezni.\n--More-- Többsoros kiírás esetén szóközzel lehet sorokat lépni, vagy ESC-vel kilépni.',
+                  textAlign: TextAlign.center,
+                )
+              : SizedBox(),
         ],
       ),
     );
