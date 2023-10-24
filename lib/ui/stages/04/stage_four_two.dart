@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 import 'package:cisco_szabadulas/helpers/serial.dart';
@@ -31,6 +32,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
   String lastLine = '';
   bool plinkConnected = false;
   int currentStep = 0;
+  int stepBefore = 0;
 
   @override
   void initState() {
@@ -156,6 +158,12 @@ class _StageFourTwoState extends State<StageFourTwo> {
                           deleteLastLine();
                           return;
                         }
+                        if (encoded.length == 1 &&
+                            encoded[0] == 26 &&
+                            globals.sanitizeInput) {
+                          //CTRL+Z
+                          return;
+                        }
                         if (((encoded.length == 1 && encoded[0] == 13) ||
                                 encodedStr.endsWith('13,10')) &&
                             globals.sanitizeInput) {
@@ -236,13 +244,13 @@ class _StageFourTwoState extends State<StageFourTwo> {
                             content:
                                 'Nem sikerült a router-t inicializálni.\nSzólj a játékvezetőnek lécci 🥺',
                           );
-                          for (int i = 0; i <= 20; i++) {
+                          for (int i = 0; i <= 25; i++) {
                             terminal.keyInput(TerminalKey.returnKey);
                           }
                           return;
                         }
 
-                        for (int i = 0; i <= 20; i++) {
+                        for (int i = 0; i <= 25; i++) {
                           terminal.keyInput(TerminalKey.returnKey);
                         }
 
@@ -264,7 +272,10 @@ class _StageFourTwoState extends State<StageFourTwo> {
                         globals.routerInit = true;
                         globals.prefs.setBool('routerInit', true);
                       } else {
-                        for (int i = 0; i <= 20; i++) {
+                        for (int i = 0; i <= 30; i++) {
+                          for (int j = 0; j <= Random().nextInt(5); j++) {
+                            terminal.keyInput(TerminalKey.space);
+                          }
                           terminal.keyInput(TerminalKey.returnKey);
                         }
                       }
@@ -325,21 +336,30 @@ class _StageFourTwoState extends State<StageFourTwo> {
                         onPressed: () {
                           setState(() {
                             if (currentStep != 0) {
-                              currentStep--;
+                              stepBefore = currentStep--;
                             }
                           });
                         },
                         child: Text('Vissza'),
                       ),
                     ),
-                    stepsToConfigure[currentStep],
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 500),
+                      child: stepsToConfigure[currentStep],
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
                     FractionallySizedBox(
                       widthFactor: 0.2,
                       child: TextButton(
                         onPressed: () {
                           setState(() {
                             if (currentStep != stepsToConfigure.length - 1) {
-                              currentStep++;
+                              stepBefore = currentStep++;
                             }
                           });
                         },
@@ -351,9 +371,12 @@ class _StageFourTwoState extends State<StageFourTwo> {
               : SizedBox(),
           SizedBox(height: 25),
           globals.pcNumber == 1
-              ? Text(
-                  'Parancsokat az ENTER lenyomásával lehet elküldeni.\nSegítséget a \'?\' gomb lenyomásával kaphatsz.\nHa elkezdesz gépelni egy parancsot, akkor azt a TAB lenyomásával be tudod fejezni.\n--More-- Többsoros kiírás esetén szóközzel lehet sorokat lépni, vagy ESC-vel kilépni.',
-                  textAlign: TextAlign.center,
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: Text(
+                    'Parancsokat az ENTER lenyomásával lehet elküldeni.\nSegítséget a \'?\' gomb lenyomásával kaphatsz.\nHa elkezdesz gépelni egy parancsot, akkor azt a TAB lenyomásával be tudod fejezni.\n--More-- Többsoros kiírás esetén szóközzel lehet sorokat lépni, vagy ESC-vel kilépni.',
+                    textAlign: TextAlign.center,
+                  ),
                 )
               : SizedBox(),
         ],
