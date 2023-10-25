@@ -10,7 +10,7 @@ Future<void> showSimpleAlert({
     builder: (context) => AlertDialog(
       title: Text(title),
       content: SingleChildScrollView(
-        child: Text(
+        child: SelectableText(
           content,
         ),
       ),

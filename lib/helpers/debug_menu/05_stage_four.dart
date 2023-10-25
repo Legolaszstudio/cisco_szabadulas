@@ -3,6 +3,11 @@ import '../globals.dart' as globals;
 
 bool routerInit = false;
 bool sanitizeInput = true;
+bool override_router_ip_check = false;
+bool override_router_mask_check = false;
+bool override_router_sh_check = false;
+bool override_router_proto_check = false;
+bool override_router_gw_check = false;
 
 void showStageFourDebugMenu(BuildContext context) {
   showDialog(
@@ -17,6 +22,11 @@ void showStageFourDebugMenu(BuildContext context) {
             globals.prefs.setBool('routerInit', routerInit);
 
             globals.sanitizeInput = sanitizeInput;
+            globals.override_router_ip_check = override_router_ip_check;
+            globals.override_router_mask_check = override_router_mask_check;
+            globals.override_router_sh_check = override_router_sh_check;
+            globals.override_router_proto_check = override_router_proto_check;
+            globals.override_router_gw_check = override_router_gw_check;
             Navigator.of(context).pop();
           },
           child: Text('OK'),
@@ -38,6 +48,11 @@ class _StageFourDebugMenuState extends State<StageFourDebugMenu> {
   void initState() {
     routerInit = globals.routerInit;
     sanitizeInput = globals.sanitizeInput;
+    override_router_ip_check = globals.override_router_ip_check;
+    override_router_mask_check = globals.override_router_mask_check;
+    override_router_sh_check = globals.override_router_sh_check;
+    override_router_proto_check = globals.override_router_proto_check;
+    override_router_gw_check = globals.override_router_gw_check;
     super.initState();
   }
 
@@ -61,6 +76,52 @@ class _StageFourDebugMenuState extends State<StageFourDebugMenu> {
             onChanged: (newValue) {
               setState(() {
                 sanitizeInput = newValue!;
+              });
+            },
+          ),
+          Divider(),
+          CheckboxListTile(
+            title: Text('Override IP check'),
+            value: override_router_ip_check,
+            onChanged: (newValue) {
+              setState(() {
+                override_router_ip_check = newValue!;
+              });
+            },
+          ),
+          CheckboxListTile(
+            title: Text('Override Mask check'),
+            value: override_router_mask_check,
+            onChanged: (newValue) {
+              setState(() {
+                override_router_mask_check = newValue!;
+              });
+            },
+          ),
+          CheckboxListTile(
+            title: Text('Override SH check'),
+            value: override_router_sh_check,
+            onChanged: (newValue) {
+              setState(() {
+                override_router_sh_check = newValue!;
+              });
+            },
+          ),
+          CheckboxListTile(
+            title: Text('Override Proto check'),
+            value: override_router_proto_check,
+            onChanged: (newValue) {
+              setState(() {
+                override_router_proto_check = newValue!;
+              });
+            },
+          ),
+          CheckboxListTile(
+            title: Text('Override GW check'),
+            value: override_router_gw_check,
+            onChanged: (newValue) {
+              setState(() {
+                override_router_gw_check = newValue!;
               });
             },
           ),

@@ -34,8 +34,15 @@ bool override_ip_check_permanent = false;
 bool override_http_check = false;
 bool override_http_check_permanent = false;
 
+bool override_router_ip_check = false;
+bool override_router_mask_check = false;
+bool override_router_sh_check = false;
+bool override_router_proto_check = false;
+bool override_router_gw_check = false;
+
 //-------------- Timings ---------------
 int timeForStageOne = 15; //Minutes
+
 int stageOneStart = 0;
 int stageOneEnd = 0;
 int stageTwoStart = 0;
@@ -44,6 +51,8 @@ int stageThreeStart = 0;
 int stageThreeEnd = 0;
 int stageFourStart = 0;
 int stageFourEnd = 0;
+int stageFiveStart = 0;
+int stageFiveEnd = 0;
 
 Future<void> initGlobals() async {
   client.connectionTimeout = const Duration(seconds: 15);
@@ -67,4 +76,6 @@ Future<void> initGlobals() async {
   stageThreeEnd = prefs.getInt('stageThreeEnd') ?? 0;
   stageFourStart = prefs.getInt('stageFourStart') ?? 0;
   stageFourEnd = prefs.getInt('stageFourEnd') ?? 0;
+  stageFiveStart = prefs.getInt('stageFiveStart') ?? 0;
+  stageFiveEnd = prefs.getInt('stageFiveEnd') ?? 0;
 }

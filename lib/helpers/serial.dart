@@ -49,7 +49,8 @@ bool isUnsafeCommand(
     return true;
   }
   if ((cmd.startsWith('ip') || cmd.startsWith('no ip')) &&
-      (!cmd.startsWith('ip add') && !cmd.startsWith('no ip add'))) {
+      (!cmd.startsWith('ip add') && !cmd.startsWith('no ip add')) &&
+      (!cmd.startsWith('ip route') && !cmd.startsWith('no ip route'))) {
     terminal.write(
       '\r\nIp settings are disabled!\n\r',
     );

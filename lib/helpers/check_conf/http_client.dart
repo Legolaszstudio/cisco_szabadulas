@@ -17,7 +17,7 @@ Future<bool> runHttpConnectivityCheck(BuildContext context,
       context: context,
       title: 'Hiba - A másik gép nem válaszol',
       content:
-          'Minden jónak tűnik, de a másik géptől nem kapok választ 😢\nA másik gépen is minden jó? Jó helyre van minden bedugva?\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
+          'Minden jónak tűnik, de a másik géptől nem kapok választ 😢\nA másik gépen is minden jó? Minden beállítás helyes? Jó helyre van minden bedugva?\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
     );
     return false;
   }
@@ -77,6 +77,15 @@ Future<String> checkHttpConnectivity(String destination, int stageNum) async {
       }
     case 3:
       if (bodyResult.contains(getStageThreeCheckCode(
+        globals.teamNumber!,
+        otherPcNum,
+      ))) {
+        return 'OK';
+      } else {
+        return 'WrongBody ' + bodyResult;
+      }
+    case 4:
+      if (bodyResult.contains(getStageFourCheckCode(
         globals.teamNumber!,
         otherPcNum,
       ))) {
