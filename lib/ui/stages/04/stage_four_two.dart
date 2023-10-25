@@ -151,6 +151,9 @@ class _StageFourTwoState extends State<StageFourTwo> {
   }
 
   void nextStageDialog() {
+    globals.stageFourEnd = DateTime.now().millisecondsSinceEpoch;
+    globals.prefs.setInt('stageFourEnd', globals.stageFourEnd);
+    print('Timing ended for stage 4: ${globals.stageFourEnd}');
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -164,7 +167,6 @@ class _StageFourTwoState extends State<StageFourTwo> {
               Navigator.of(context).pop();
               globals.currentStage = 4.3;
               globals.prefs.setDouble('currentStage', 4.3);
-              globals.stageFourEnd = 0;
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => StageFourThree(),

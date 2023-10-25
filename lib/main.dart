@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
       case 4:
       case 4.1:
       case 4.2:
+      case 4.3:
         // This is on purpose, do not change, it will redirect to the correct page, needed for http srv
         screen = StageFour();
         break;

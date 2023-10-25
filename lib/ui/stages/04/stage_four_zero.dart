@@ -2,6 +2,7 @@ import 'package:cisco_szabadulas/helpers/check_conf/http_server.dart';
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/ui/html/stage_four_html.dart';
 import 'package:cisco_szabadulas/ui/stages/04/stage_four_one.dart';
+import 'package:cisco_szabadulas/ui/stages/04/stage_four_three.dart';
 import 'package:cisco_szabadulas/ui/stages/04/stage_four_two.dart';
 import 'package:flutter/material.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
@@ -40,6 +41,13 @@ class _StageFourState extends State<StageFour> {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => StageFourTwo(),
+          ),
+        );
+      }
+      if (globals.currentStage == 4.3) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => StageFourThree(),
           ),
         );
       }
