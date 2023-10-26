@@ -179,6 +179,7 @@ Egy valamit jól véssetek eszetekbe: X.C.C.C
               child: Form(
                 key: _formKey,
                 child: TextFormField(
+                  //TODO: autofocus?
                   controller: _passwordCtrl,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),

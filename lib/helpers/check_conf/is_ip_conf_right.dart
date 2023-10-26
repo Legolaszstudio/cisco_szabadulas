@@ -84,7 +84,10 @@ Future<String> isIpConfRight(
   }
 
   // Check ipv4 address configuration
-  List<InternetAddress> addresses = interfaces[0].addresses;
+  List<InternetAddress> addresses = interfaces[0]
+      .addresses
+      .where((element) => element.type.name == 'IPv4')
+      .toList();
   if (addresses.isEmpty) {
     return 'NoAddress';
   } else if (addresses.length > 1) {
