@@ -106,7 +106,7 @@ Nektek itt vége a versenynek, kérlek hagyjátok el a konyhát.
 Csak vicceltem 🤣
 Semmi gond; ha idáig eljutottatok, az már elég bizonyíték arra, hogy ti vagytok a legjobbak a feladatra! 😎
 
-Egy valamit jól vésetek eszetekbe: X.C.C.C
+Egy valamit jól véssetek eszetekbe: X.C.C.C
 ''');
         });
       }
@@ -157,66 +157,68 @@ Egy valamit jól vésetek eszetekbe: X.C.C.C
           ),
         ],
       ),
-      body: ListView(
-        shrinkWrap: true,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
-            child: Text(
-              '''
-A gépeken találtok elszórva pár levelet, pontosan 4-et, melyeket az ilyen vészhelyzetek esetére rejtettem el. 😅
-Viszont direkt el vannak rejtve, hogy akárki ne találhassa meg őket.
-A feladatotok az, hogy megtaláljátok őket, és a kódot beírjátok ide alulra;
-''',
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.start,
+      body: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
+              child: Text(
+                '''
+      A gépeken találtok elszórva pár levelet, pontosan 4-et, melyeket az ilyen vészhelyzetek esetére rejtettem el. 😅
+      Viszont direkt el vannak rejtve, hogy akárki ne találhassa meg őket.
+      A feladatotok az, hogy megtaláljátok őket, és a kódot beírjátok ide alulra;
+      ''',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.start,
+              ),
             ),
-          ),
-          hintWidget,
-          Padding(
-            padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
-            child: Form(
-              key: _formKey,
-              child: TextFormField(
-                controller: _passwordCtrl,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Kód',
-                  errorStyle: TextStyle(color: Colors.red),
+            hintWidget,
+            Padding(
+              padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
+              child: Form(
+                key: _formKey,
+                child: TextFormField(
+                  controller: _passwordCtrl,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Kód',
+                    errorStyle: TextStyle(color: Colors.red),
+                  ),
+                  onFieldSubmitted: (value) {
+                    if (_formKey.currentState!.validate()) {
+                      goToNextStage(true);
+                    }
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Kérem a jelszót';
+                    }
+                    if (value.toLowerCase() != globals.stageOnePassword) {
+                      return 'Hibás jelszó';
+                    }
+                    return null;
+                  },
                 ),
-                onFieldSubmitted: (value) {
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.5,
+              child: TextButton.icon(
+                onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     goToNextStage(true);
                   }
                 },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Kérem a jelszót';
-                  }
-                  if (value.toLowerCase() != globals.stageOnePassword) {
-                    return 'Hibás jelszó';
-                  }
-                  return null;
-                },
+                icon: Icon(Icons.key),
+                label: Text('Tovább'),
               ),
-            ),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          FractionallySizedBox(
-            widthFactor: 0.5,
-            child: TextButton.icon(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  goToNextStage(true);
-                }
-              },
-              icon: Icon(Icons.key),
-              label: Text('Tovább'),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

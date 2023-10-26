@@ -10,7 +10,7 @@ import '../simple_alert.dart';
 HttpClient client = HttpClient();
 
 Future<bool> runHttpConnectivityCheck(BuildContext context,
-    {required String destination, required int stageNum}) async {
+    {required String destination, required double stageNum}) async {
   String checkResult = await checkHttpConnectivity(destination, stageNum);
   if (checkResult == 'TimeoutException') {
     showSimpleAlert(
@@ -37,7 +37,7 @@ Future<bool> runHttpConnectivityCheck(BuildContext context,
       context: context,
       title: 'Hiba - Nem tudom mi történik 😅',
       content:
-          'Ezt a hibát nem kellene sohasem látni...\nHaladéktalanuk szólj a játékvezőtnek!\n\nRészletek:\n$checkResult',
+          'Ezt a hibát nem kellene sohasem látni...\nHaladéktalanul szólj a játékvezetőnek!\n\nRészletek:\n$checkResult',
     );
     return false;
   }
@@ -45,7 +45,8 @@ Future<bool> runHttpConnectivityCheck(BuildContext context,
   return true;
 }
 
-Future<String> checkHttpConnectivity(String destination, int stageNum) async {
+Future<String> checkHttpConnectivity(
+    String destination, double stageNum) async {
   if (globals.override_http_check) {
     if (!globals.override_http_check_permanent) {
       globals.override_http_check = false;
@@ -89,6 +90,26 @@ Future<String> checkHttpConnectivity(String destination, int stageNum) async {
         globals.teamNumber!,
         otherPcNum,
       ))) {
+        return 'OK';
+      } else {
+        return 'WrongBody ' + bodyResult;
+      }
+    case 5.0:
+    case 5.1:
+    case 5.2:
+      String subStage = stageNum.toStringAsFixed(1).split('.')[1];
+      if (bodyResult.contains(getStageFiveCheckCode(
+        globals.teamNumber!,
+        otherPcNum,
+        subStage,
+      ))) {
+        return 'OK';
+      } else {
+        return 'WrongBody ' + bodyResult;
+      }
+    case 100:
+      //Hertelendi PC
+      if (bodyResult.contains(getHertelendiCheckCode())) {
         return 'OK';
       } else {
         return 'WrongBody ' + bodyResult;

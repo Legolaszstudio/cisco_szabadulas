@@ -4,7 +4,7 @@ String stage_three_html() {
   String otherPcLinks = '';
   for (int i = 1; i <= (globals.numberOfTeams ?? 7); i++) {
     otherPcLinks +=
-        '<a href="http://192.168.$i.1:8080"> $i csapat 1.-es gép</a><br>\n<a href="http://192.168.$i.2:8080"> $i csapat 2.-es gép</a><br><br>\n';
+        '<a href="http://192.168.$i.1:8080"> $i csapat 1-es gép</a><br>\n<a href="http://192.168.$i.2:8080"> $i csapat 2-es gép</a><br><br>\n';
   }
 
   return '''

@@ -68,31 +68,49 @@ class _StageFourState extends State<StageFour> {
           },
         ),
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-            child: Text(
-                'Ide jöhet majd a magyarázat, hogy mit kell mivel összekötni)'),
-          ),
-          FractionallySizedBox(
-            widthFactor: 0.5,
-            child: TextButton.icon(
-              icon: Icon(Icons.next_plan),
-              label: Text('Következő'),
-              onPressed: () async {
-                globals.currentStage = 4.1;
-                globals.prefs.setDouble('currentStage', 4.1);
-
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => StageFourOne(),
-                  ),
-                );
-              },
+      body: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+              child: Text(
+                '''
+      Annyira buta vagyok, de tényleg, nagyon sajnálom 😅😭
+      Az én gépem egy teljesen másik hálózatban van (10.x.x.x), így azt továbbra sem érjük el..
+      Sajnos nem létezik olyan maszk, hogy 0.0.0.0...
+      
+      De szerencsére a másik zúgó csoda eszköz, melynek becses neve Router, pontosan ezt a feladatot látja el, különböző hálózatokat köt össze.
+      Mivel nem szeretünk élesben tesztelni, ezért építsünk fel egy picike teszt hálózatot a routerünkkel és a két géppel...
+      
+      Ehhez romboljunk le mindent amit eddig bedugtunk, összekötöttünk... 😅
+      Bocsánat, tényleg sajnálom 😭
+      
+      Ha kész vagyunk, akkor lépjünk csak tovább;
+      ''',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        ],
+            FractionallySizedBox(
+              widthFactor: 0.5,
+              child: TextButton.icon(
+                icon: Icon(Icons.next_plan),
+                label: Text('Következő'),
+                onPressed: () async {
+                  globals.currentStage = 4.1;
+                  globals.prefs.setDouble('currentStage', 4.1);
+
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => StageFourOne(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

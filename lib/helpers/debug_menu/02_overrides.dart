@@ -5,6 +5,7 @@ bool ip_check_override = false;
 bool ip_check_override_permanent = false;
 bool http_check_override = false;
 bool http_check_override_permanent = false;
+bool ping_check_override = false;
 
 void showOverridesDebugMenu(BuildContext context) {
   showDialog(
@@ -20,6 +21,7 @@ void showOverridesDebugMenu(BuildContext context) {
             globals.override_http_check = http_check_override;
             globals.override_http_check_permanent =
                 http_check_override_permanent;
+            globals.override_ping_check = ping_check_override;
             Navigator.of(context).pop();
           },
           child: Text('Mentés'),
@@ -43,6 +45,7 @@ class _OverridesDebugMenuState extends State<OverridesDebugMenu> {
     ip_check_override_permanent = globals.override_ip_check_permanent;
     http_check_override = globals.override_http_check;
     http_check_override_permanent = globals.override_http_check_permanent;
+    ping_check_override = globals.override_ping_check;
     super.initState();
   }
 
@@ -84,6 +87,15 @@ class _OverridesDebugMenuState extends State<OverridesDebugMenu> {
             onChanged: (newValue) {
               setState(() {
                 http_check_override_permanent = newValue!;
+              });
+            },
+          ),
+          CheckboxListTile(
+            value: ping_check_override,
+            title: Text('Ping check override'),
+            onChanged: (newValue) {
+              setState(() {
+                ping_check_override = newValue!;
               });
             },
           ),

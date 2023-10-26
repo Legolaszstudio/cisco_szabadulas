@@ -1,6 +1,7 @@
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/helpers/ms_to_human_str.dart';
 import 'package:cisco_szabadulas/ui/stages/05/stage_five_zero.dart';
+import 'package:cisco_szabadulas/ui/widgets/reading_for_quickies.dart';
 import 'package:flutter/material.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 
@@ -52,8 +53,13 @@ class _StageFourThreeState extends State<StageFourThree> {
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
             child: Text(
               '''
-Nagyon ügyes voltál, meg minden szépség. Ennyi idő volt kijutni a negyedik stádiumból: ${_timeToCompleteStr}
+Nagyon tuti vagy 😎
+Ennyi idő volt kijutni a negyedik stádiumból: ${_timeToCompleteStr}
+
+Megvárjuk a többi csapatot, utána folytatjuk
 ''',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
             ),
           ),
           SizedBox(height: 10),
@@ -89,7 +95,9 @@ Nagyon ügyes voltál, meg minden szépség. Ennyi idő volt kijutni a negyedik 
                           globals.prefs.setDouble('currentStage', 5.0);
                           globals.stageFiveStart = 0;
                           globals.stageFiveEnd = 0;
+                          globals.stageFiveSectionOneEnd = 0;
                           globals.prefs.setInt('stageFiveEnd', 0);
+                          globals.prefs.setInt('stageFiveSectionOneEnd', 0);
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => StageFive(),
@@ -108,7 +116,10 @@ Nagyon ügyes voltál, meg minden szépség. Ennyi idő volt kijutni a negyedik 
               icon: Icon(Icons.next_plan),
               label: Text('Következő'),
             ),
-          )
+          ),
+          SizedBox(height: 15),
+          ReadingForQuickies(),
+          SizedBox(height: 15),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/helpers/ms_to_human_str.dart';
 import 'package:cisco_szabadulas/ui/stages/03/stage_three_zero.dart';
+import 'package:cisco_szabadulas/ui/widgets/reading_for_quickies.dart';
 import 'package:flutter/material.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 
@@ -53,8 +54,15 @@ class _StageTwoTwoState extends State<StageTwoTwo> {
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
             child: Text(
               '''
-Nagyon ügyes voltál, meg minden szépség. Ennyi idő volt kijutni a második stádiumból: ${_timeToCompleteStr}
+Nagyon ügyes voltál ismét 🎉
+Ennyi idő volt kijutni a második stádiumból: ${_timeToCompleteStr}
+
+Megvárjuk a többi csapatot, utána folytatjuk
 ''',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
           ),
           SizedBox(height: 10),
@@ -109,7 +117,10 @@ Nagyon ügyes voltál, meg minden szépség. Ennyi idő volt kijutni a második 
               icon: Icon(Icons.next_plan),
               label: Text('Következő'),
             ),
-          )
+          ),
+          SizedBox(height: 15),
+          ReadingForQuickies(),
+          SizedBox(height: 15),
         ],
       ),
     );

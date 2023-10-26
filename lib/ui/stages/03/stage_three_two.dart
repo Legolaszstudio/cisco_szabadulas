@@ -4,6 +4,8 @@ import 'package:cisco_szabadulas/helpers/check_conf/is_ip_conf_right.dart';
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/helpers/simple_alert.dart';
 import 'package:cisco_szabadulas/ui/stages/03/stage_three_three.dart';
+import 'package:cisco_szabadulas/ui/widgets/ip_help.dart';
+import 'package:cisco_szabadulas/ui/widgets/reading_for_quickies.dart';
 import 'package:flutter/material.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 import 'package:loader_overlay/loader_overlay.dart';
@@ -17,6 +19,7 @@ class StageThreeTwo extends StatefulWidget {
 
 class _StageThreeTwoState extends State<StageThreeTwo> {
   bool _isChecking = false;
+  bool showReading = false;
   Widget _statefulHint = SizedBox();
   Widget _btnWidget = Icon(Icons.checklist);
   Widget _checkList = SizedBox();
@@ -38,9 +41,24 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-            child: Text('Jaj én buta a maszk az /16 😅!'),
+            child: Text(
+              '''
+Jaj én butus, így továbbra is csak a saját csapatunkat érjük el! 😅
+Hiszen a 255.255.255.0-ás maszk az jelenti, hogy csak olyan címekkel beszélgetünk, aminek az első három számjegye megegyezik a sajátunkkal.
+Mivel minden csapat a saját csapatszámát használja harmadik számjegyként, ezért ez így nem lesz jó.
+
+Ez gyorsan orvosolható, csak át kell írni a maszkot 255.255.0.0-ra.
+Így már csak az első két számjegynek kell stimmelni, hogy tudjunk beszélgetni.
+''',
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
           ),
           SizedBox(height: 10),
+          IpHelp(
+            myIp: '192.168.${globals.teamNumber}.${globals.pcNumber}',
+            myMask: '255.255.0.0',
+          ),
           _statefulHint,
           SizedBox(height: 10),
           FractionallySizedBox(
@@ -64,7 +82,6 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                 context.loaderOverlay.hide();
 
                 if (ipCheckResult == false) {
-                  //TODO: _statefulHint, ip beállításra utalni
                   _isChecking = false;
                   return;
                 }
@@ -72,7 +89,17 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                 setState(() {
                   _btnWidget = CircularProgressIndicator();
                 });
-                List<Widget> checkListItems = [];
+                List<Widget> checkListItems = [
+                  ListTile(
+                    title: Text('Hertelendi gépe'),
+                    trailing: Wrap(
+                      direction: Axis.horizontal,
+                      children: [
+                        CircularProgressIndicator(),
+                      ],
+                    ),
+                  ),
+                ];
                 Map<String, String> resultMap = {};
                 for (int i = 1; i <= (globals.numberOfTeams ?? 7); i++) {
                   checkListItems.add(
@@ -96,6 +123,48 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                 });
 
                 final FutureGroup futureGroup = FutureGroup();
+                Future<void> checkHertelendiPc() async {
+                  String httpResult = await checkHttpConnectivity(
+                    'http://10.100.100.100',
+                    100,
+                  );
+                  print('http check result 10.100.100.100: $httpResult');
+                  if (httpResult == 'OK') {
+                    checkListItems[0] = ListTile(
+                      title: Text('Hertelendi gépe'),
+                      trailing: Wrap(
+                        direction: Axis.horizontal,
+                        children: [
+                          Tooltip(
+                            message: httpResult,
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    checkListItems[0] = ListTile(
+                      title: Text('Hertelendi gépe'),
+                      trailing: Wrap(
+                        direction: Axis.horizontal,
+                        children: [
+                          Tooltip(
+                            message: httpResult,
+                            child: Icon(
+                              Icons.error,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                }
+
+                futureGroup.add(checkHertelendiPc());
                 for (int i = 1; i <= (globals.numberOfTeams ?? 7); i++) {
                   Future<void> task() async {
                     String httpResultOne = await checkHttpConnectivity(
@@ -105,7 +174,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                     print('http check result 192.168.$i.1: $httpResultOne');
                     resultMap['$i.1'] = httpResultOne;
                     if (httpResultOne == 'OK') {
-                      checkListItems[i - 1] = ListTile(
+                      checkListItems[i] = ListTile(
                         title: Text('Csapat $i'),
                         trailing: Wrap(
                           direction: Axis.horizontal,
@@ -123,7 +192,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                         ),
                       );
                     } else {
-                      checkListItems[i - 1] = ListTile(
+                      checkListItems[i] = ListTile(
                         title: Text('Csapat $i'),
                         trailing: Wrap(
                           direction: Axis.horizontal,
@@ -155,7 +224,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                     print('http check result 192.168.$i.2: $httpResultTwo');
                     if (httpResultOne == 'OK') {
                       if (httpResultTwo == 'OK') {
-                        checkListItems[i - 1] = ListTile(
+                        checkListItems[i] = ListTile(
                           title: Text('Csapat $i'),
                           trailing: Wrap(
                             direction: Axis.horizontal,
@@ -179,7 +248,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                           ),
                         );
                       } else {
-                        checkListItems[i - 1] = ListTile(
+                        checkListItems[i] = ListTile(
                           title: Text('Csapat $i'),
                           trailing: Wrap(
                             direction: Axis.horizontal,
@@ -205,7 +274,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                       }
                     } else {
                       if (httpResultTwo == 'OK') {
-                        checkListItems[i - 1] = ListTile(
+                        checkListItems[i] = ListTile(
                           title: Text('Csapat $i'),
                           trailing: Wrap(
                             direction: Axis.horizontal,
@@ -229,7 +298,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                           ),
                         );
                       } else {
-                        checkListItems[i - 1] = ListTile(
+                        checkListItems[i] = ListTile(
                           title: Text('Csapat $i'),
                           trailing: Wrap(
                             direction: Axis.horizontal,
@@ -278,7 +347,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                     context: context,
                     title: 'Hiba - Nem sikerült semmilyen kapcsolat...',
                     content:
-                        'Azért a saját csapatodat el kellene érni, nem?\nValami nagyon furcsa hiba történhetet...\n\nMinden be van dugva? Jó helyre?\nMinden ip cím jól van beállítva?\n\nHa a hiba továbbra is fennáll szóljatok bátran!',
+                        'Azért a saját csapatodat el kellene érni, nem?\nValami nagyon furcsa hiba történhetett...\n\nMinden be van dugva? Jó helyre?\nMinden ip cím jól van beállítva?\n\nHa a hiba továbbra is fennáll szóljatok bátran!',
                   );
                   setState(() {
                     _btnWidget = Icon(Icons.checklist);
@@ -294,10 +363,17 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                     context: context,
                     title: 'Hiba - Csak a saját csapatba tudok csatlakozni...',
                     content:
-                        'A saját csapatunkkal tudunk kommunikálni, ez már fél siker 😊\n\nSubnet mask jól lett beállítva?\nMinden be van dugva? Jó helyre? A saját switch össze van kötve a közös switchel?\n\nHa a hiba továbbra is fennáll szóljatok bátran!',
+                        'A saját csapatunkkal tudunk kommunikálni, ez már fél siker 😊\n\nSubnet mask jól lett beállítva?\nMinden be van dugva? Jó helyre? A saját switch össze van kötve a \'fő\' switchel?\n\nHa a hiba továbbra is fennáll szóljatok bátran!',
                   );
                   setState(() {
-                    //TODO: _statefulHint, switch összekötésre utalni, mivel ez a legvalószínűbb hiba
+                    _statefulHint = Container(
+                      constraints: BoxConstraints.expand(
+                          height: MediaQuery.of(context).size.height * 0.6),
+                      child: Image(
+                        fit: BoxFit.scaleDown,
+                        image: AssetImage('assets/03eszkozok/mainSw.jpg'),
+                      ),
+                    );
                     _btnWidget = Icon(Icons.checklist);
                     _isChecking = false;
                   });
@@ -317,6 +393,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                   setState(() {
                     _btnWidget = Icon(Icons.checklist);
                     _isChecking = false;
+                    showReading = true;
                   });
                   return;
                 }
@@ -345,7 +422,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
                     context: context,
                     title: 'Hiba - Nem tudom mi történik 😅',
                     content:
-                        'Ezt a hibát nem kellene sohasem látni...\nHaladéktalanuk szólj a játékvezőtnek!\n\nRészletek:\n$resultMap',
+                        'Ezt a hibát nem kellene sohasem látni...\nHaladéktalanul szólj a játékvezetőnek!\n\nRészletek:\n$resultMap',
                   );
                   setState(() {
                     _btnWidget = Icon(Icons.checklist);
@@ -382,6 +459,9 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
           ),
           SizedBox(height: 25),
           _checkList,
+          SizedBox(height: 15),
+          if (showReading) ReadingForQuickies(),
+          SizedBox(height: 15),
         ],
       ),
     );

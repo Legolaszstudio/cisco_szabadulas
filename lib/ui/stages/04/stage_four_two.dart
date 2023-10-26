@@ -26,7 +26,7 @@ void setCommandCallback(String cmd) {
 List<CommandTutorial> stepsToConfigure = [
   CommandTutorial(
     'enable',
-    'Belépni rendszergazda módba, a router neve után megjelenik egy #-t.\nEzt általában jelszóval le szoktuk védeni, de most az egyszerűség kedvéért nem.',
+    'Belépni rendszergazda módba, a router neve után megjelenik egy #.\nEzt általában jelszóval le szoktuk védeni, de most az egyszerűség kedvéért nem.',
     setCommandCallback,
   ),
   CommandTutorial(
@@ -41,7 +41,7 @@ List<CommandTutorial> stepsToConfigure = [
   ),
   CommandTutorial(
     'ip address 192.168.${globals.teamNumber}.254 255.255.255.0',
-    'Állítsuk be ezen a porton mi lesz a router címe.\nHa egy hálózatban 1db router van, akkor vagy az első, vagy az utolsó címet szokás neki adni.\nMivel az első cím már a gépünké, ezért az utolsót használjuk.',
+    'Állítsuk be ezen a porton mi lesz a router címe.\nHa egy hálózatban 1 db router van, akkor vagy az első, vagy az utolsó címet szokás neki adni.\nMivel az első cím már a gépünké, ezért az utolsót használjuk.',
     setCommandCallback,
   ),
   CommandTutorial(
@@ -51,7 +51,7 @@ List<CommandTutorial> stepsToConfigure = [
   ),
   CommandTutorial(
     'interface fastEthernet 0/1',
-    'Válasszuk ki a másik az interfészt, ezzel fogjuk az ajtónyító hálózatot szimulálni.',
+    'Válasszuk ki a másik interfészt, ezzel fogjuk az ajtónyitó hálózatot szimulálni.',
     setCommandCallback,
   ),
   CommandTutorial(
@@ -66,7 +66,7 @@ List<CommandTutorial> stepsToConfigure = [
   ),
   CommandTutorial(
     'exit',
-    'Lépjünk vissza ki a konfigurációs módba. A router neve után \'(config)#\' található.',
+    'Lépjünk vissza a konfigurációs módba. A router neve után \'(config)#\' található.',
     setCommandCallback,
   ),
   CommandTutorial(
@@ -76,12 +76,12 @@ List<CommandTutorial> stepsToConfigure = [
   ),
   CommandTutorial(
     'exit',
-    'Lépjünk vissza ki admin módba. A router neve után már csak egy \'#\' található.',
+    'Lépjünk vissza admin módba. A router neve után már csak egy \'#\' található.',
     setCommandCallback,
   ),
   CommandTutorial(
     'show ip interface brief',
-    'Nézzük meg, hogy minden cím és kapcsolat jó-e.\nHa az összekötetés jó akkor a sorok végén azt kell látni, hogy \'up up\'\nFastEthernet 0/0 192.168.${globals.teamNumber}.254\nFastEthernet 0/1 10.10.10.${globals.teamNumber}',
+    'Nézzük meg, hogy minden cím és kapcsolat jó-e.\nHa az összeköttetés jó akkor a sorok végén azt kell látni, hogy \'up up\'\nFastEthernet 0/0 192.168.${globals.teamNumber}.254\nFastEthernet 0/1 10.10.10.${globals.teamNumber}',
     setCommandCallback,
   ),
   CommandTutorial(
@@ -91,12 +91,12 @@ List<CommandTutorial> stepsToConfigure = [
   ),
   CommandTutorial(
     'show ip route | include last resort',
-    'Nézzük meg, hogy tényleg az átjáró tényleg a fő router (10.10.10.254)',
+    'Nézzük meg, hogy az átjáró tényleg a fő router (10.10.10.254)',
     setCommandCallback,
   ),
   CommandTutorial(
     'Hiba esetén',
-    'Töröljük ki a hibás útvonalat a \'no ip route ...\' paranccsal (... helyére a rossz címeket helyetessítsétek be).\nMajd újra futassuk le az \'ip route\' parancsot a helyes címmel.',
+    'Töröljük ki a hibás útvonalat a \'no ip route ...\' paranccsal (... helyére a rossz címeket helyettessítsétek be).\nMajd újra futassuk le az \'ip route\' parancsot a helyes címmel.',
     setCommandCallback,
   ),
 ];
@@ -124,7 +124,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
     commandToConfigure = '';
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (globals.pcNumber != 1) {
-        terminal.write('\Ez most nem működik\n');
+        terminal.write('\r\nEz most nem működik\n');
         terminal.write('\rA másik gépen tudjátok a routert beállítani.\n');
         terminal.write('\r\n');
         terminal.write(
@@ -584,6 +584,11 @@ class _StageFourTwoState extends State<StageFourTwo> {
                             await Future.delayed(Duration(milliseconds: 50));
                             terminal.keyInput(TerminalKey.returnKey);
                           }
+
+                          serialPort?.kill();
+                          setState(() {
+                            plinkConnected = false;
+                          });
                           return;
                         }
 
@@ -629,7 +634,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
               : Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                   child: Text(
-                    'Most csak az első gépen van feladat.',
+                    'Most csak az első gépen elérhető a feladat.',
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -710,7 +715,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
           SizedBox(height: 25),
           globals.pcNumber == 1 && plinkConnected
               ? Text(
-                  'Az alábbi parancsokat segítségével kellene a routert működésre bírni: ${currentStep + 1}/${stepsToConfigure.length}',
+                  'Az alábbi parancsok segítségével kellene a routert működésre bírni: ${currentStep + 1}/${stepsToConfigure.length}',
                   textAlign: TextAlign.center,
                 )
               : SizedBox(),

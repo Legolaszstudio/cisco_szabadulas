@@ -6,3 +6,9 @@ String getStageThreeCheckCode(int teamNumber, int pcNumber) =>
 
 String getStageFourCheckCode(int teamNumber, int pcNumber) =>
     'af883afc-0776-464b-9717-fcfa42681539-0x${teamNumber}${pcNumber}';
+
+String getStageFiveCheckCode(int teamNumber, int pcNumber, String substage) =>
+    '25751a43-e361-433c-a26c-44aa1efbbc18-0x${teamNumber}${pcNumber}-${substage}';
+
+String getHertelendiCheckCode() =>
+    'd94164e7-1613-4770-8872-cf4a34e33abb-0xHertelendi';

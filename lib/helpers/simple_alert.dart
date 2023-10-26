@@ -4,9 +4,12 @@ Future<void> showSimpleAlert({
   required BuildContext context,
   required String title,
   required String content,
+  Function? okCallback,
+  bool dismissable = true,
 }) {
   return showDialog(
     context: context,
+    barrierDismissible: dismissable,
     builder: (context) => AlertDialog(
       title: Text(title),
       content: SingleChildScrollView(
@@ -19,6 +22,7 @@ Future<void> showSimpleAlert({
           child: Text('OK'),
           onPressed: () {
             Navigator.of(context).pop();
+            if (okCallback != null) okCallback();
           },
         ),
       ],

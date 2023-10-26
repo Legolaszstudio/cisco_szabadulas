@@ -3,7 +3,7 @@ import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 
 import '00_debug_selector.dart';
 
-void showDebugMenu() {
+void showDebugMenu({Function? setStateCallback}) {
   if (globals.navigatorKey.currentContext == null) {
     print('showDebugMenu: navigatorKey.currentContext is null');
     return;
@@ -36,7 +36,7 @@ void showDebugMenu() {
               onFieldSubmitted: (_) {
                 if (_formKey.currentState!.validate()) {
                   Navigator.of(context).pop();
-                  enterDebugMenu();
+                  enterDebugMenu(setStateCallback: setStateCallback);
                 }
               },
               validator: (value) {
@@ -57,7 +57,7 @@ void showDebugMenu() {
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               Navigator.of(context).pop();
-              enterDebugMenu();
+              enterDebugMenu(setStateCallback: setStateCallback);
             }
           },
           child: Text('OK'),
@@ -68,12 +68,12 @@ void showDebugMenu() {
   return;
 }
 
-void enterDebugMenu() {
+void enterDebugMenu({Function? setStateCallback}) {
   showDialog(
     context: globals.navigatorKey.currentContext!,
     builder: (context) => AlertDialog(
       title: Text('Fejlesztői menü'),
-      content: DebugSelector(),
+      content: DebugSelector(setStateCallback: setStateCallback),
     ),
   );
 }

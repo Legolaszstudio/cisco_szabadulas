@@ -7,6 +7,11 @@ TextEditingController _stageTwoStartCtrl = TextEditingController();
 TextEditingController _stageTwoTimeCtrl = TextEditingController();
 TextEditingController _stageThreeStartCtrl = TextEditingController();
 TextEditingController _stageThreeTimeCtrl = TextEditingController();
+TextEditingController _stageFourStartCtrl = TextEditingController();
+TextEditingController _stageFourTimeCtrl = TextEditingController();
+TextEditingController _stageFiveStartCtrl = TextEditingController();
+TextEditingController _stageFiveTimeCtrl = TextEditingController();
+TextEditingController _stageFiveSectionOneTime = TextEditingController();
 
 void showTimingsDebugMenu(BuildContext context) {
   _stageOneStartCtrl.text = globals.stageOneStart.toString();
@@ -20,6 +25,16 @@ void showTimingsDebugMenu(BuildContext context) {
   _stageThreeStartCtrl.text = globals.stageThreeStart.toString();
   _stageThreeTimeCtrl.text =
       (globals.stageThreeEnd - globals.stageThreeStart).toString();
+
+  _stageFourStartCtrl.text = globals.stageFourStart.toString();
+  _stageFourTimeCtrl.text =
+      (globals.stageFourEnd - globals.stageFourStart).toString();
+
+  _stageFiveStartCtrl.text = globals.stageFiveStart.toString();
+  _stageFiveSectionOneTime.text =
+      (globals.stageFiveSectionOneEnd - globals.stageFiveStart).toString();
+  _stageFiveTimeCtrl.text =
+      (globals.stageFiveEnd - globals.stageFiveStart).toString();
 
   showDialog(
     context: context,
@@ -64,6 +79,38 @@ void showTimingsDebugMenu(BuildContext context) {
                 globals.stageThreeStart + int.parse(_stageThreeTimeCtrl.text);
             globals.prefs.setInt('stageThreeEnd', stageThreeEnd);
             globals.stageThreeEnd = stageThreeEnd;
+
+            // -------------------- Stage Four ------------------------
+            globals.prefs.setInt(
+              'stageFourStart',
+              int.parse(_stageFourStartCtrl.text),
+            );
+            globals.stageFourStart = int.parse(_stageFourStartCtrl.text);
+
+            int stageFourEnd =
+                globals.stageFourStart + int.parse(_stageFourTimeCtrl.text);
+            globals.prefs.setInt('stageFourEnd', stageFourEnd);
+            globals.stageFourEnd = stageFourEnd;
+
+            // -------------------- Stage Five ------------------------
+            globals.prefs.setInt(
+              'stageFiveStart',
+              int.parse(_stageFiveStartCtrl.text),
+            );
+            globals.stageFiveStart = int.parse(_stageFiveStartCtrl.text);
+
+            int stageFiveEnd =
+                globals.stageFiveStart + int.parse(_stageFiveTimeCtrl.text);
+            globals.prefs.setInt('stageFiveEnd', stageFiveEnd);
+            globals.stageFiveEnd = stageFiveEnd;
+
+            int stageFiveSectionOneEnd = globals.stageFiveStart +
+                int.parse(_stageFiveSectionOneTime.text);
+            globals.prefs.setInt(
+              'stageFiveSectionOneEnd',
+              stageFiveSectionOneEnd,
+            );
+            globals.stageFiveSectionOneEnd = stageFiveSectionOneEnd;
 
             Navigator.of(context).pop();
           },
@@ -126,6 +173,41 @@ class _TimingsDebugMenuState extends State<TimingsDebugMenu> {
             controller: _stageThreeTimeCtrl,
             decoration: const InputDecoration(
               labelText: 'Stage 3 Time To Complete (ms)',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _stageFourStartCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Stage 4 Start',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _stageFourTimeCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Stage 4 Time To Complete (ms)',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _stageFiveStartCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Stage 5 Start',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _stageFiveSectionOneTime,
+            decoration: const InputDecoration(
+              labelText: 'Stage 5 Section 1 Time To Complete (ms)',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _stageFiveTimeCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Stage 5 Time To Complete (ms)',
             ),
           ),
         ],

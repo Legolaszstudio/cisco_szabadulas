@@ -5,14 +5,16 @@ import 'package:cisco_szabadulas/helpers/check_conf/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../lockSystem/lock_system_screen.dart';
+
 final navigatorKey = GlobalKey<NavigatorState>();
 final String devPassword = utf8.decode([97, 108, 109, 97]);
 final String stageOnePassword = utf8.decode([99, 105, 115, 99, 111]);
 
 late SharedPreferences prefs;
-late int? teamNumber;
-late int? pcNumber;
-late int? numberOfTeams;
+late int? teamNumber = 1;
+late int? pcNumber = 1;
+late int? numberOfTeams = 7;
 late String? teamName = '';
 /** 
  *  -1 = Init;  
@@ -26,13 +28,14 @@ bool routerInit = false;
 bool sanitizeInput = true;
 HttpServer? server;
 /** 0 = Offline, X = Stage X */
-int httpServerVer = 0;
+double httpServerVer = 0;
 
 //-------------- Overrides --------------
 bool override_ip_check = false;
 bool override_ip_check_permanent = false;
 bool override_http_check = false;
 bool override_http_check_permanent = false;
+bool override_ping_check = false;
 
 bool override_router_ip_check = false;
 bool override_router_mask_check = false;
@@ -52,14 +55,17 @@ int stageThreeEnd = 0;
 int stageFourStart = 0;
 int stageFourEnd = 0;
 int stageFiveStart = 0;
+int stageFiveSectionOneEnd = 0;
 int stageFiveEnd = 0;
+
+Map<String, dynamic> timingData = {};
 
 Future<void> initGlobals() async {
   client.connectionTimeout = const Duration(seconds: 15);
 
   prefs = await SharedPreferences.getInstance();
-  teamNumber = prefs.getInt('teamNumber');
-  pcNumber = prefs.getInt('pcNumber');
+  teamNumber = prefs.getInt('teamNumber') ?? 1;
+  pcNumber = prefs.getInt('pcNumber') ?? 1;
   currentStage = prefs.getDouble('currentStage') ?? -1;
   networkInterface = prefs.getString('networkInterface') ?? 'Ethernet';
   teamName = prefs.getString('teamName') ?? '';
@@ -77,5 +83,17 @@ Future<void> initGlobals() async {
   stageFourStart = prefs.getInt('stageFourStart') ?? 0;
   stageFourEnd = prefs.getInt('stageFourEnd') ?? 0;
   stageFiveStart = prefs.getInt('stageFiveStart') ?? 0;
+  stageFiveSectionOneEnd = prefs.getInt('stageFiveSectionOneEnd') ?? 0;
   stageFiveEnd = prefs.getInt('stageFiveEnd') ?? 0;
+
+  timingData = jsonDecode(prefs.getString('timingData') ?? '{}');
+  if (connectionStatus.length == 0)
+    connectionStatus = List<int>.filled(
+      numberOfTeams!,
+      0,
+      growable: false,
+    );
+  timingData.keys.forEach((element) {
+    connectionStatus[int.parse(element.split('.')[0]) - 1] = 1;
+  });
 }

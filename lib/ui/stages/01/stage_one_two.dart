@@ -1,10 +1,12 @@
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/helpers/ms_to_human_str.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_zero.dart';
+import 'package:cisco_szabadulas/ui/widgets/reading_for_quickies.dart';
 import 'package:flutter/material.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 
 class StageOneTwo extends StatefulWidget {
+  final bool success = true;
   const StageOneTwo({super.key, required bool success});
 
   @override
@@ -48,13 +50,16 @@ class _StageOneTwoState extends State<StageOneTwo> {
       ),
       body: ListView(
         children: [
-          //TODO: Felhasználni a success attributot
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
             child: Text(
               '''
-Nagyon ügyes voltál, meg minden szépség. Ennyi idő volt kijutni az első stádiumból: ${_timeToCompleteStr}
+Nagyon ügyesek voltatok. ${widget.success ? "Minden levelet megtaláltatok ✨" : ""}\nEnnyi idő volt kijutni az első stádiumból: ${_timeToCompleteStr}\n\nMegvárjuk a többi csapatot, utána folytatjuk.
 ''',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
           ),
           SizedBox(height: 10),
@@ -110,6 +115,8 @@ Nagyon ügyes voltál, meg minden szépség. Ennyi idő volt kijutni az első st
               label: Text('Következő'),
             ),
           ),
+          SizedBox(height: 15),
+          ReadingForQuickies(),
         ],
       ),
     );

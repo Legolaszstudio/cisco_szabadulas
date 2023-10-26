@@ -35,11 +35,74 @@ class _StageTwoOneState extends State<StageTwoOne> {
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
             child: Text(
               '''
-Itt kellene írni arról, hogy hogyan a fallba bedugni a cuccokat, meg a rackbe
+Jut eszembe, ha összekötitek a két gépet, úgy kétszer gyorsabban fogjátok tudni feltörni a gépemet 😅
+Ehhez viszont a sarokban található zúgó ketyerékre lesz majd szükségetek.
+A gépektől a szekrényig vannak kábelek a falba, így nekünk szerencsére nem kell majd 20-30 méteres kábeleket gubancolni.
+
+
+1. Dugjuk át gépünket a szekrényhez vezető (falban található) kábelbe.
+Jelen pillanatban nagy valószínűséggel a NET feliratú aljzatba van dugva.
+Innen kellene átdugni a piros (RACK feliratú) aljzatba. (Jegyezzük fel a számot ahova bedugtuk!)
 ''',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Container(
+            constraints: BoxConstraints.expand(
+                height: MediaQuery.of(context).size.height * 0.6),
+            child: Image(
+              fit: BoxFit.scaleDown,
+              image: AssetImage('assets/03eszkozok/fal.jpg'),
+            ),
+          ),
+          SizedBox(height: 20),
+          Text(
+            '''
+Az alábbi eszközök a tietek, de ez ott is fel lesz matricázva;
+''',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
+          ),
+          Container(
+            constraints: BoxConstraints.expand(
+                height: MediaQuery.of(context).size.height * 0.90),
+            child: Image(
+              fit: BoxFit.scaleDown,
+              image: AssetImage(
+                  'assets/03eszkozok/csoportok/${globals.teamNumber}.jpg'),
+            ),
+          ),
+          SizedBox(height: 20),
+          Text(
+            '''
+Most a fentebb található, 'sok lyukú' eszközre van szükségetek, őt úgy hívják, hogy switch.
+Feladata, hogy összekösse a sok számítógépet. Jelen esetben a mi kettő gépünket.
+A középen található 'H' jelölésű elosztó (patch) panel a falba bedugott kábel másik vége.
+''',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
+          ),
+          Container(
+            constraints: BoxConstraints.expand(
+                height: MediaQuery.of(context).size.height * 0.6),
+            child: Image(
+              fit: BoxFit.scaleDown,
+              image: AssetImage('assets/03eszkozok/patch01.jpg'),
             ),
           ),
           SizedBox(height: 10),
+          Text(
+            '''
+Tehát, a képet például véve, ha a 31-es fali aljzatba dugtuk a gépünket az előbb, akkor itt a 'H' panelen is a 31-esből fogunk kiindulni
+És bedugni a switchünk a bal oldalon található 24 port valamelyikébe. (Mind1 melyikbe, mindegyik 'össze van kötve')
+Ha mindent jól csináltunk akkor a port felett található led elkezd sárgán villogni, majd (ha türelmesek vagyunk), akkor zöld-re vált és kezdődhet a kommunikáció.
+
+Ha jól csináltunk mindent, mind két gépen/géppel, akkor az alábbi ellenőrzés gomb szépen tovább fog engedni minket;
+''',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
+          ),
           FractionallySizedBox(
             widthFactor: 0.5,
             child: TextButton.icon(
@@ -103,6 +166,7 @@ Itt kellene írni arról, hogy hogyan a fallba bedugni a cuccokat, meg a rackbe
               },
             ),
           ),
+          SizedBox(height: 10),
         ],
       ),
     );

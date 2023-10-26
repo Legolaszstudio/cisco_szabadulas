@@ -74,7 +74,7 @@ Nektek itt vége a versenynek, kérlek hagyjátok el a konyhát.
 Csak vicceltem 🤣
 Semmi gond; ha idáig eljutottatok, az már elég bizonyíték arra, hogy ti vagytok a legjobbak a feladatra! 😎
 
-Egy valamit jól vésetek eszetekbe: X.C.C.C
+Egy valamit jól véssetek eszetekbe: X.C.C.C
 ''');
         });
       }

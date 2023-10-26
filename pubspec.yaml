@@ -45,6 +45,7 @@ dependencies:
   async: ^2.11.0
   serial_port_win32: ^1.3.0
   xterm: ^3.5.0
+  dart_ping: ^9.0.1
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +81,9 @@ flutter:
     - assets/01levelek/
     - assets/01levelek/randomImages/
     - assets/01levelek/randomSounds/
+    - assets/02ipConfig/
+    - assets/03eszkozok/
+    - assets/03eszkozok/csoportok/
 
   #   - images/a_dot_ham.jpeg
 

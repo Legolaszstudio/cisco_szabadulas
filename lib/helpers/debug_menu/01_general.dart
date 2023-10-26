@@ -6,11 +6,13 @@ TextEditingController _pcNumberCtrl = TextEditingController();
 TextEditingController _stageCtrl = TextEditingController();
 TextEditingController _networkInterfaceCtrl = TextEditingController();
 TextEditingController _comPortCtrl = TextEditingController();
+TextEditingController _numOfTeamsCtrl = TextEditingController();
 
 void showGeneralDebugMenu(BuildContext context) {
   _teamNumberCtrl.text = globals.teamNumber.toString();
   _pcNumberCtrl.text = globals.pcNumber.toString();
   _stageCtrl.text = globals.currentStage.toString();
+  _numOfTeamsCtrl.text = globals.numberOfTeams.toString();
   _networkInterfaceCtrl.text = globals.networkInterface;
   _comPortCtrl.text = globals.comPort;
 
@@ -47,6 +49,11 @@ void showGeneralDebugMenu(BuildContext context) {
               _comPortCtrl.text,
             );
             globals.comPort = _comPortCtrl.text;
+            globals.prefs.setInt(
+              'numberOfTeams',
+              int.parse(_numOfTeamsCtrl.text),
+            );
+            globals.numberOfTeams = int.parse(_numOfTeamsCtrl.text);
             Navigator.of(context).pop();
           },
           child: Text('Mentés'),
@@ -80,6 +87,13 @@ class _GeneralDebugMenuState extends State<GeneralDebugMenu> {
             controller: _pcNumberCtrl,
             decoration: const InputDecoration(
               labelText: 'Komputer szám',
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _numOfTeamsCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Csapatok száma (db)',
             ),
           ),
           SizedBox(height: 10),

@@ -18,8 +18,11 @@ class StageThree extends StatefulWidget {
 }
 
 class _StageThreeState extends State<StageThree> {
+  String myIp = '192.168.${globals.teamNumber}.${globals.pcNumber}';
+
   @override
   void initState() {
+    myIp = '192.168.${globals.teamNumber}.${globals.pcNumber}';
     setWindowTitle('Cisco Szabadulás - Harmadik stádium');
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (globals.httpServerVer != 0) {
@@ -74,8 +77,10 @@ class _StageThreeState extends State<StageThree> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-            child: Text('Ip konfiguráció rendben?'),
+            child: Text('Ugye nem állítódott el még a címünk?',
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
           ),
+          SizedBox(height: 10),
           FractionallySizedBox(
             widthFactor: 0.5,
             child: TextButton.icon(
@@ -83,9 +88,6 @@ class _StageThreeState extends State<StageThree> {
               label: Text('Ellenőrzés'),
               onPressed: () async {
                 context.loaderOverlay.show();
-
-                String myIp =
-                    '192.168.${globals.teamNumber}.${globals.pcNumber}';
 
                 bool ipCheckResult = await runIpCheck(
                   context,

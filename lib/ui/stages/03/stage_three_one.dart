@@ -39,7 +39,28 @@ class _StageThreeOneState extends State<StageThreeOne> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-            child: Text('Kössünk össze mindent!'),
+            child: Text(
+              '''
+Na de várjunk csak... Nem csak ketten vagytok, van több csapat is rajtatok kívül...
+Kössük össze az összes csapatot, így már jóval gyorsabban fel fogjátok tudni törni a gépemet!
+Hiszen minnél több számítógép van, annál több műveletet tudunk futattni párhuzamosan.
+
+Egyszerűen a switch jobb szélén található 'uplink' (másik switchre csatlakozó) port egyikét dugjátok be a legfelső 'fő switchbe', amihez az én gépem is csatlakozik.
+''',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(height: 10),
+          Container(
+            constraints: BoxConstraints.expand(
+                height: MediaQuery.of(context).size.height * 0.6),
+            child: Image(
+              fit: BoxFit.scaleDown,
+              image: AssetImage('assets/03eszkozok/mainSw.jpg'),
+            ),
           ),
           SizedBox(height: 10),
           FractionallySizedBox(
@@ -85,7 +106,12 @@ class _StageThreeOneState extends State<StageThreeOne> {
                 setState(() {
                   _btnWidget = CircularProgressIndicator();
                 });
-                List<Widget> checkListItems = [];
+                List<Widget> checkListItems = [
+                  ListTile(
+                    title: Text('Hertelendi gépe'),
+                    trailing: CircularProgressIndicator(),
+                  ),
+                ];
                 for (int i = 1; i <= (globals.numberOfTeams ?? 7); i++) {
                   checkListItems.add(
                     ListTile(
@@ -102,14 +128,23 @@ class _StageThreeOneState extends State<StageThreeOne> {
 
                 bool httpCheckResult = false;
                 final FutureGroup futureGroup = FutureGroup();
-                for (int i = 1; i <= (globals.numberOfTeams ?? 7); i++) {
+                for (int i = 0; i <= (globals.numberOfTeams ?? 7); i++) {
+                  //FIXME, override only one team check
                   Future<void> task() async {
                     await Future.delayed(
                       Duration(
                         milliseconds: 1000 + Random().nextInt(1000),
                       ),
                     );
-                    if (i == globals.teamNumber) {
+                    if (i == 0) {
+                      checkListItems[i] = ListTile(
+                        title: Text('Hertelendi gépe'),
+                        trailing: Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        ),
+                      );
+                    } else if (i == globals.teamNumber) {
                       httpCheckResult = await runHttpConnectivityCheck(
                         context,
                         destination: 'http://$otherPcIp/',
@@ -117,7 +152,7 @@ class _StageThreeOneState extends State<StageThreeOne> {
                       );
                       print('http check result: $httpCheckResult');
                       if (httpCheckResult == false) {
-                        checkListItems[i - 1] = ListTile(
+                        checkListItems[i] = ListTile(
                           title: Text('Csapat $i'),
                           trailing: Icon(
                             Icons.error,
@@ -125,7 +160,7 @@ class _StageThreeOneState extends State<StageThreeOne> {
                           ),
                         );
                       } else {
-                        checkListItems[i - 1] = ListTile(
+                        checkListItems[i] = ListTile(
                           title: Text('Csapat $i'),
                           trailing: Icon(
                             Icons.check,
@@ -139,7 +174,7 @@ class _StageThreeOneState extends State<StageThreeOne> {
                         );
                       });
                     } else {
-                      checkListItems[i - 1] = ListTile(
+                      checkListItems[i] = ListTile(
                         title: Text('Csapat $i'),
                         trailing: Icon(
                           Icons.error,
@@ -161,7 +196,7 @@ class _StageThreeOneState extends State<StageThreeOne> {
 
                 await Future.delayed(
                   Duration(
-                    milliseconds: 2500,
+                    milliseconds: 3500,
                   ),
                 );
 
@@ -185,6 +220,7 @@ class _StageThreeOneState extends State<StageThreeOne> {
           ),
           SizedBox(height: 25),
           _checkList,
+          SizedBox(height: 25),
         ],
       ),
     );

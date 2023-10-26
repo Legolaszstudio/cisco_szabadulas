@@ -1,5 +1,9 @@
+import 'package:cisco_szabadulas/helpers/check_conf/http_server.dart';
+import 'package:cisco_szabadulas/helpers/simple_alert.dart';
 import 'package:cisco_szabadulas/ui/start_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:serial_port_win32/serial_port_win32.dart';
 import '../helpers/globals.dart' as globals;
 
 class InitScreen extends StatefulWidget {
@@ -18,6 +22,15 @@ class _InitScreenState extends State<InitScreen> {
   );
   TextEditingController _numberOfTeamsCtrl = TextEditingController(text: '7');
   TextEditingController _comPortCtrl = TextEditingController(text: 'COM3');
+
+  @override
+  void initState() {
+    startServer('Testing').then((value) {
+      globals.server = value;
+      globals.httpServerVer = -1;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +97,31 @@ class _InitScreenState extends State<InitScreen> {
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () {
-                          //TODO: Check firewall and other permissions
+                        onPressed: () async {
+                          context.loaderOverlay.show();
+
+                          if (globals.httpServerVer != 0) {
+                            globals.server?.close();
+                            globals.httpServerVer = 0;
+                          }
+
+                          final ports = SerialPort.getPortsWithFullMessages();
+                          if (!ports.any(
+                                (element) =>
+                                    element.portName == _comPortCtrl.text,
+                              ) &&
+                              _pcNumberCtrl.text == '1') {
+                            showSimpleAlert(
+                              context: context,
+                              title:
+                                  'Hiba - Nem található a ${globals.comPort} port',
+                              content:
+                                  'Elérhető portok:\n\t-${ports.map((e) => "${e.portName} (${e.friendlyName})").join('\n\t-')}',
+                            );
+                            context.loaderOverlay.hide();
+                            return;
+                          }
+
                           globals.teamNumber = int.parse(_teamNumberCtrl.text);
                           globals.prefs.setInt(
                             'teamNumber',
@@ -122,6 +158,8 @@ class _InitScreenState extends State<InitScreen> {
 
                           globals.prefs.setDouble('currentStage', 0);
                           globals.currentStage = 0;
+
+                          context.loaderOverlay.hide();
 
                           Navigator.of(context).pop();
                           Navigator.of(context).pushReplacement(

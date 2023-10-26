@@ -1,4 +1,5 @@
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
+import 'package:cisco_szabadulas/lockSystem/lock_system_screen.dart';
 import 'package:cisco_szabadulas/ui/init_screen.dart';
 import 'package:cisco_szabadulas/ui/stages/01/stage_one_one.dart';
 import 'package:cisco_szabadulas/ui/stages/01/stage_one_two.dart';
@@ -6,6 +7,10 @@ import 'package:cisco_szabadulas/ui/stages/01/stage_one_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/02/stage_two_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/03/stage_three_zero.dart';
 import 'package:cisco_szabadulas/ui/stages/04/stage_four_zero.dart';
+import 'package:cisco_szabadulas/ui/stages/05/stage_five_one.dart';
+import 'package:cisco_szabadulas/ui/stages/05/stage_five_three.dart';
+import 'package:cisco_szabadulas/ui/stages/05/stage_five_two.dart';
+import 'package:cisco_szabadulas/ui/stages/05/stage_five_zero.dart';
 import 'package:cisco_szabadulas/ui/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -61,6 +66,21 @@ class MyApp extends StatelessWidget {
         // This is on purpose, do not change, it will redirect to the correct page, needed for http srv
         screen = StageFour();
         break;
+      case 5:
+        screen = StageFive();
+        break;
+      case 5.1:
+        screen = StageFiveOne();
+        break;
+      case 5.2:
+        screen = StageFiveTwo();
+        break;
+      case 5.3:
+        screen = StageFiveThree();
+        break;
+    }
+    if (globals.teamNumber == -1) {
+      screen = LockSystemScreen();
     }
     return GlobalLoaderOverlay(
       useDefaultLoading: false,
