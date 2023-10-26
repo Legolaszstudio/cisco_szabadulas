@@ -46,7 +46,11 @@ Future<bool> runHttpConnectivityCheck(BuildContext context,
 }
 
 Future<String> checkHttpConnectivity(
-    String destination, double stageNum) async {
+  String destination,
+  double stageNum, {
+  int? teamNumber,
+  int? pcNumber,
+}) async {
   if (globals.override_http_check) {
     if (!globals.override_http_check_permanent) {
       globals.override_http_check = false;
@@ -66,11 +70,21 @@ Future<String> checkHttpConnectivity(
     otherPcNum = 1;
   }
 
+  int teamNumToCheck = globals.teamNumber!;
+  if (teamNumber != null) {
+    teamNumToCheck = teamNumber;
+  }
+
+  int pcNumToCheck = otherPcNum;
+  if (pcNumber != null) {
+    pcNumToCheck = pcNumber;
+  }
+
   switch (stageNum) {
     case 2:
       if (bodyResult.contains(getStageTwoCheckCode(
-        globals.teamNumber!,
-        otherPcNum,
+        teamNumToCheck,
+        pcNumToCheck,
       ))) {
         return 'OK';
       } else {
@@ -78,8 +92,8 @@ Future<String> checkHttpConnectivity(
       }
     case 3:
       if (bodyResult.contains(getStageThreeCheckCode(
-        globals.teamNumber!,
-        otherPcNum,
+        teamNumToCheck,
+        pcNumToCheck,
       ))) {
         return 'OK';
       } else {
@@ -87,8 +101,8 @@ Future<String> checkHttpConnectivity(
       }
     case 4:
       if (bodyResult.contains(getStageFourCheckCode(
-        globals.teamNumber!,
-        otherPcNum,
+        teamNumToCheck,
+        pcNumToCheck,
       ))) {
         return 'OK';
       } else {
@@ -99,8 +113,8 @@ Future<String> checkHttpConnectivity(
     case 5.2:
       String subStage = stageNum.toStringAsFixed(1).split('.')[1];
       if (bodyResult.contains(getStageFiveCheckCode(
-        globals.teamNumber!,
-        otherPcNum,
+        teamNumToCheck,
+        pcNumToCheck,
         subStage,
       ))) {
         return 'OK';

@@ -186,6 +186,8 @@ Kössük össze a routerünket a fő switch-hel, hogy elérjük az én hálózat
                     String httpResultOne = await checkHttpConnectivity(
                       'http://192.168.$i.1',
                       5.2,
+                      teamNumber: i,
+                      pcNumber: 1,
                     );
                     print('http check result 192.168.$i.1: $httpResultOne');
                     resultMap['$i.1'] = httpResultOne;
@@ -244,6 +246,8 @@ Kössük össze a routerünket a fő switch-hel, hogy elérjük az én hálózat
                     String httpResultTwo = await checkHttpConnectivity(
                       'http://192.168.$i.2',
                       5.2,
+                      teamNumber: i,
+                      pcNumber: 2,
                     );
                     resultMap['$i.2'] = httpResultTwo;
                     print('http check result 192.168.$i.2: $httpResultTwo');
