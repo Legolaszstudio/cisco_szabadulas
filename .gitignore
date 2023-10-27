@@ -45,3 +45,4 @@ app.*.map.json
 
 test.dart
 tools/exes/
+tools/cisco_szabadulas.exe
