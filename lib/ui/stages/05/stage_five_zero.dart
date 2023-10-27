@@ -72,7 +72,7 @@ ${globals.pcNumber == 2 ? '\nÁllítsuk vissza az ip címünket \'belső hálóz
             ),
           Text(
             '''
-Dugjuk is be a gépeket a switchünk be!
+Dugjuk is be a gépeket a switchünk be! (Routerből ki mindkettőt és át a switchbe)
 ''',
             style: TextStyle(fontSize: 18),
             textAlign: TextAlign.center,

@@ -174,7 +174,7 @@ class _StageFiveThreeState extends State<StageFiveThree>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Az ajtónyító rendszer ip címe: ',
+                          'Az ajtónyitó rendszer a gépemen fut a 1234-es porton: ',
                           style: TextStyle(fontSize: 20),
                           textAlign: TextAlign.center,
                         ),
@@ -184,14 +184,14 @@ class _StageFiveThreeState extends State<StageFiveThree>
                               'C:\\Windows\\system32\\cmd.exe',
                               [
                                 '/c',
-                                'start microsoft-edge:http://10.100.100.254:1234/',
+                                'start microsoft-edge:http://10.100.100.100:1234/',
                               ],
                             );
                           },
                           child: MouseRegion(
                             cursor: SystemMouseCursors.click,
                             child: Text(
-                              '10.100.100.254',
+                              '10.100.100.100:1234',
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.blue,
