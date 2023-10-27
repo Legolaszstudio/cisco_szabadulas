@@ -2,13 +2,7 @@ import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/helpers/ms_to_human_str.dart';
 import 'package:flutter/material.dart';
 
-Map<String, num?> endingTimings = {
-  'Novy': 2.213123,
-  'Halott': null,
-  'Alma': 21.321321,
-  'Halott2': null,
-  'Urbina': 123
-};
+Map<String, num?> endingTimings = {};
 
 class EndingScreen extends StatefulWidget {
   const EndingScreen({super.key});

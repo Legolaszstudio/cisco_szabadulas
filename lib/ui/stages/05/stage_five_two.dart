@@ -422,6 +422,13 @@ Kössük össze a routerünket a fő switch-hel, hogy elérjük az én hálózat
                   );
                   setState(() {
                     _showReading = true;
+                    Future.delayed(Duration(milliseconds: 500)).then((value) {
+                      _controller.animateTo(
+                        _controller.position.maxScrollExtent,
+                        curve: Curves.easeOut,
+                        duration: const Duration(milliseconds: 500),
+                      );
+                    });
                     _btnWidget = Icon(Icons.checklist);
                     _isChecking = false;
                   });

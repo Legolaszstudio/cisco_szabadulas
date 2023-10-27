@@ -17,6 +17,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:window_size/window_size.dart';
 
+FocusNode focus = FocusNode();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   globals.initGlobals();
@@ -85,9 +87,14 @@ class MyApp extends StatelessWidget {
     return GlobalLoaderOverlay(
       useDefaultLoading: false,
       overlayColor: Color.fromARGB(128, 0, 0, 0),
-      overlayWidget: Center(
-        child: SpinKitPulsingGrid(
-          color: Colors.orange,
+      overlayWidget: RawKeyboardListener(
+        focusNode: focus,
+        child: IgnorePointer(
+          child: Center(
+            child: SpinKitPulsingGrid(
+              color: Colors.orange,
+            ),
+          ),
         ),
       ),
       child: MaterialApp(

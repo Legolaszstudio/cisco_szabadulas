@@ -74,8 +74,7 @@ Future<void> startLockSystemWebSrv(Function setStateCallback) async {
       while (!result.startsWith('OK') && i <= 5) {
         try {
           result = await getTiming(event.connectionInfo!.remoteAddress.address);
-          result = result.split('OK ').sublist(1).join('');
-          timing = jsonDecode(result);
+          timing = jsonDecode(result.split('OK ').sublist(1).join(''));
         } catch (e) {
           result = 'Exception $e';
         }
