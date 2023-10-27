@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'ending_screen.dart';
 import 'lock_system_websrv.dart';
 
 List<int> connectionStatus = [];
@@ -76,6 +79,57 @@ class _LockSystemScreenState extends State<LockSystemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!connectionStatus.any((element) => element == 0)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        for (int i = 1; i <= globals.numberOfTeams!; i++) {
+          if (connectionStatus[i - 1] == -1) continue;
+          String teamName = globals.timingData['$i.1']['teamName'] ??
+              globals.timingData['$i.2']['teamName'];
+
+          num avgTime = 0;
+          if (globals.timingData['$i.1'] != null) {
+            avgTime += globals.timingData['$i.1']['stageOneTime'];
+            avgTime += globals.timingData['$i.1']['stageTwoTime'];
+            avgTime += globals.timingData['$i.1']['stageThreeTime'];
+            avgTime += globals.timingData['$i.1']['stageFourTime'];
+            avgTime += globals.timingData['$i.1']['stageFiveTime'];
+            avgTime += globals.timingData['$i.1']['stageFiveSectionOneTime'];
+            avgTime /= 6;
+          }
+
+          num avgTime2 = 0;
+          if (globals.timingData['$i.2'] != null) {
+            avgTime2 += globals.timingData['$i.2']['stageOneTime'];
+            avgTime2 += globals.timingData['$i.2']['stageTwoTime'];
+            avgTime2 += globals.timingData['$i.2']['stageThreeTime'];
+            avgTime2 += globals.timingData['$i.2']['stageFourTime'];
+            avgTime2 += globals.timingData['$i.2']['stageFiveTime'];
+            avgTime2 += globals.timingData['$i.2']['stageFiveSectionOneTime'];
+            avgTime2 /= 6;
+          }
+
+          if (avgTime <= 0 && avgTime2 <= 0) {
+            endingTimings[teamName] = null;
+          } else if (avgTime <= 0 && avgTime2 >= 0) {
+            endingTimings[teamName] = avgTime2;
+          } else if (avgTime >= 0 && avgTime2 <= 0) {
+            endingTimings[teamName] = avgTime;
+          } else if (avgTime >= 0 && avgTime2 >= 0) {
+            endingTimings[teamName] = min(avgTime, avgTime2);
+          } else {
+            endingTimings[teamName] = null;
+          }
+
+          print('Ending timings for team $i $teamName: $endingTimings');
+        }
+        await Future.delayed(Duration(seconds: 2));
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => EndingScreen(),
+          ),
+        );
+      });
+    }
     return Scaffold(
       body: RawKeyboardListener(
         focusNode: FocusNode()..requestFocus(),

@@ -1,4 +1,4 @@
-String msToHumanStr(int ms) {
+String msToHumanStr(num ms) {
   int minutes = (ms / 60000).floor();
   int seconds = ((ms % 60000) / 1000).floor();
   return minutes.toString().padLeft(2, '0') +
