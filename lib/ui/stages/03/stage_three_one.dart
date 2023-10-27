@@ -21,6 +21,7 @@ class _StageThreeOneState extends State<StageThreeOne> {
   bool _isChecking = false;
   Widget _btnWidget = Icon(Icons.checklist);
   Widget _checkList = SizedBox();
+  ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class _StageThreeOneState extends State<StageThreeOne> {
         ),
       ),
       body: ListView(
+        controller: _controller,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -120,10 +122,18 @@ Egyszerűen a switch jobb szélén található 'uplink' (másik switchre csatlak
                     ),
                   );
                 }
+
                 setState(() {
                   _checkList = Column(
                     children: checkListItems,
                   );
+                  Future.delayed(Duration(milliseconds: 500)).then((value) {
+                    _controller.animateTo(
+                      _controller.position.maxScrollExtent,
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 500),
+                    );
+                  });
                 });
 
                 bool httpCheckResult = false;

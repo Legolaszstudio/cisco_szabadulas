@@ -24,6 +24,7 @@ class _StageFiveTwoState extends State<StageFiveTwo> {
   bool _showReading = false;
   Widget _btnWidget = Icon(Icons.checklist);
   Widget _checkList = SizedBox();
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _StageFiveTwoState extends State<StageFiveTwo> {
         ),
       ),
       body: ListView(
+        controller: _controller,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -134,6 +136,13 @@ Kössük össze a routerünket a fő switch-hel, hogy elérjük az én hálózat
                   _checkList = Column(
                     children: checkListItems,
                   );
+                  Future.delayed(Duration(milliseconds: 500)).then((value) {
+                    _controller.animateTo(
+                      _controller.position.maxScrollExtent,
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 500),
+                    );
+                  });
                 });
 
                 final FutureGroup futureGroup = FutureGroup();

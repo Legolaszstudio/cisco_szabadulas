@@ -237,6 +237,18 @@ class _StageFiveThreeState extends State<StageFiveThree>
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 15),
+                    SelectableText(
+                      'Router jelszó: MaciLaci2020',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 15),
+                    SelectableText(
+                      'Wifi jelszó: LekvarosCsirke',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 15),
                   ],
                 ),
               ),

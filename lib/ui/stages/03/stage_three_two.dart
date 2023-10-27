@@ -23,6 +23,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
   Widget _statefulHint = SizedBox();
   Widget _btnWidget = Icon(Icons.checklist);
   Widget _checkList = SizedBox();
+  ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,7 @@ class _StageThreeTwoState extends State<StageThreeTwo> {
         ),
       ),
       body: ListView(
+        controller: _controller,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -120,6 +122,13 @@ Ez gyorsan orvosolható, csak át kell írni a maszkot 255.255.0.0-ra.
                   _checkList = Column(
                     children: checkListItems,
                   );
+                  Future.delayed(Duration(milliseconds: 500)).then((value) {
+                    _controller.animateTo(
+                      _controller.position.maxScrollExtent,
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 500),
+                    );
+                  });
                 });
 
                 final FutureGroup futureGroup = FutureGroup();
