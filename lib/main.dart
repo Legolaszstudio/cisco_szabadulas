@@ -11,6 +11,7 @@ import 'package:cisco_szabadulas/ui/stages/05/stage_five_one.dart';
 import 'package:cisco_szabadulas/ui/stages/05/stage_five_three.dart';
 import 'package:cisco_szabadulas/ui/stages/05/stage_five_two.dart';
 import 'package:cisco_szabadulas/ui/stages/05/stage_five_zero.dart';
+import 'package:cisco_szabadulas/ui/stages/05/the_end.dart';
 import 'package:cisco_szabadulas/ui/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -79,6 +80,9 @@ class MyApp extends StatelessWidget {
         break;
       case 5.3:
         screen = StageFiveThree();
+        break;
+      case 5.4:
+        screen = TheEnd();
         break;
     }
     if (globals.teamNumber == -1) {

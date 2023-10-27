@@ -49,12 +49,10 @@ class _LockSystemDebugMenuState extends State<LockSystemDebugMenu> {
               context.loaderOverlay.show();
               await globals.prefs.setString('timingData', '{}');
               globals.timingData = {};
-              ls_screen.connectionStatus = List.filled(
-                globals.numberOfTeams!,
-                0,
-                growable: false,
-              );
-
+              for (int i = 1; i <= globals.numberOfTeams!; i++) {
+                globals.timingData['$i.1'] = 0;
+                globals.timingData['$i.2'] = 0;
+              }
               widget.setStateCallback!();
               context.loaderOverlay.hide();
               ScaffoldMessenger.of(context).showSnackBar(
@@ -71,12 +69,15 @@ class _LockSystemDebugMenuState extends State<LockSystemDebugMenu> {
         for (int i = 0; i < globals.numberOfTeams!; i++)
           CheckboxListTile(
             title: Text('Ignore Team ${i + 1}'),
-            value: ls_screen.connectionStatus[i] == -1,
+            value: ls_screen.connectionStatus['$i.1'] == -1 &&
+                ls_screen.connectionStatus['$i.2'] == -1,
             onChanged: (newValue) {
               if (newValue!) {
-                ls_screen.connectionStatus[i] = -1;
+                ls_screen.connectionStatus['$i.1'] = -1;
+                ls_screen.connectionStatus['$i.2'] = -1;
               } else {
-                ls_screen.connectionStatus[i] = 0;
+                ls_screen.connectionStatus['$i.1'] = 0;
+                ls_screen.connectionStatus['$i.2'] = 0;
               }
               setState(() {});
               if (widget.setStateCallback != null) widget.setStateCallback!();

@@ -59,6 +59,8 @@ Ilyen privát cím tartományok a:
 10.0.0.0 - 10.255.255.255
 172.16.00 - 172.31.255.255
 
+Az iskola a 10-es hálózatot használja; 10.(elosztó szám).(terem szám).(gép szám)
+
 Létezik IPv6 is, mivel 2^32 cím az már kevés volt.
 Az IPv6 ami már 128 bittel dologzik tehát 2^128 cím, ami már bőséges.
 De ennél többet nem mondok, nézettek utána, ha érdekel ;)

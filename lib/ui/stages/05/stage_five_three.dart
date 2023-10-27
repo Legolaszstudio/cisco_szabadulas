@@ -23,6 +23,8 @@ class _StageFiveThreeState extends State<StageFiveThree>
   late AnimationController fadeInController;
 
   void endCallback() {
+    globals.currentStage = 5.4;
+    globals.prefs.setDouble('currentStage', 5.4);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => TheEnd()),
     );

@@ -104,7 +104,8 @@ Future<void> startLockSystemWebSrv(Function setStateCallback) async {
           'timingData',
           jsonEncode(globals.timingData),
         );
-        lockSystemScreen.connectionStatus[timing['teamNumber'] - 1] = 1;
+        lockSystemScreen.connectionStatus[
+            "${timing['teamNumber']}.${timing['pcNumber']}"] = 1;
         setStateCallback();
         event.response.write(
           '<p style="text-align:center;margin-top:200px">Rendszer elkezdett leállni!</p>',

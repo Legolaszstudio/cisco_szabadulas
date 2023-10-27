@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'ending_screen.dart';
 import 'lock_system_websrv.dart';
 
-List<int> connectionStatus = [];
+Map<String, int> connectionStatus = {};
 
 class LockSystemScreen extends StatefulWidget {
   const LockSystemScreen({super.key});
@@ -65,12 +65,10 @@ class _LockSystemScreenState extends State<LockSystemScreen> {
         bottomRowCount = 5;
         break;
     }
-    if (connectionStatus.length == 0)
-      connectionStatus = List<int>.filled(
-        globals.numberOfTeams!,
-        0,
-        growable: false,
-      );
+    for (int i = 1; i <= globals.numberOfTeams!; i++) {
+      connectionStatus['$i.1'] = 0;
+      connectionStatus['$i.2'] = 0;
+    }
     startLockSystemWebSrv(() {
       setState(() {});
     });
@@ -79,10 +77,11 @@ class _LockSystemScreenState extends State<LockSystemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!connectionStatus.any((element) => element == 0)) {
+    if (!connectionStatus.values.any((element) => element == 0)) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         for (int i = 1; i <= globals.numberOfTeams!; i++) {
-          if (connectionStatus[i - 1] == -1) continue;
+          if (connectionStatus['$i.1'] == -1) continue;
+          if (connectionStatus['$i.2'] == -1) continue;
           String teamName = globals.timingData['$i.1']['teamName'] ??
               globals.timingData['$i.2']['teamName'];
 
@@ -154,12 +153,14 @@ class _LockSystemScreenState extends State<LockSystemScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    for (int i = 0; i < topRowCount; i++)
+                    for (int i = 1; i <= topRowCount; i++)
                       Container(
                         decoration: BoxDecoration(
-                          color: connectionStatus[i] == 0
+                          color: (connectionStatus['$i.1'] == 0 &&
+                                  connectionStatus['$i.2'] == 0)
                               ? Colors.red
-                              : connectionStatus[i] == 1
+                              : (connectionStatus['$i.1'] == 1 &&
+                                      connectionStatus['$i.2'] == 1)
                                   ? Colors.green
                                   : Colors.grey,
                           border: Border.all(
@@ -175,13 +176,19 @@ class _LockSystemScreenState extends State<LockSystemScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Csapat ${i + 1}',
+                                'Csapat ${i}',
+                                style: TextStyle(fontSize: 50),
+                              ),
+                              Text(
+                                "${connectionStatus['${i}.1']! + connectionStatus['${i}.2']!} / 2",
                                 style: TextStyle(fontSize: 50),
                               ),
                               Icon(
-                                connectionStatus[i] == 0
+                                (connectionStatus['$i.1'] == 0 &&
+                                        connectionStatus['$i.2'] == 0)
                                     ? Icons.error
-                                    : connectionStatus[i] == 1
+                                    : (connectionStatus['$i.1'] == 1 &&
+                                            connectionStatus['$i.2'] == 1)
                                         ? Icons.check
                                         : Icons.question_mark,
                                 size: 50,
@@ -199,12 +206,18 @@ class _LockSystemScreenState extends State<LockSystemScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    for (int i = 0; i < bottomRowCount; i++)
+                    for (int i = 1; i <= bottomRowCount; i++)
                       Container(
                         decoration: BoxDecoration(
-                          color: connectionStatus[i + topRowCount] == 0
+                          color: (connectionStatus['${i + topRowCount}.1'] ==
+                                      0 &&
+                                  connectionStatus['${i + topRowCount}.2'] == 0)
                               ? Colors.red
-                              : connectionStatus[i + topRowCount] == 1
+                              : (connectionStatus['${i + topRowCount}.1'] ==
+                                          1 &&
+                                      connectionStatus[
+                                              '${i + topRowCount}.2'] ==
+                                          1)
                                   ? Colors.green
                                   : Colors.grey,
                           border: Border.all(
@@ -221,13 +234,26 @@ class _LockSystemScreenState extends State<LockSystemScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Csapat ${i + topRowCount + 1}',
+                                'Csapat ${i + topRowCount}',
+                                style: TextStyle(fontSize: 50),
+                              ),
+                              Text(
+                                "${connectionStatus['${i + topRowCount}.1']! + connectionStatus['${i + topRowCount}.2']!} / 2",
                                 style: TextStyle(fontSize: 50),
                               ),
                               Icon(
-                                connectionStatus[i + topRowCount] == 0
+                                (connectionStatus['${i + topRowCount}.1'] ==
+                                            0 &&
+                                        connectionStatus[
+                                                '${i + topRowCount}.2'] ==
+                                            0)
                                     ? Icons.error
-                                    : connectionStatus[i + topRowCount] == 1
+                                    : (connectionStatus[
+                                                    '${i + topRowCount}.1'] ==
+                                                1 &&
+                                            connectionStatus[
+                                                    '${i + topRowCount}.2'] ==
+                                                1)
                                         ? Icons.check
                                         : Icons.question_mark,
                                 size: 50,

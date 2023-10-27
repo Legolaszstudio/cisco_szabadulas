@@ -8,7 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../lockSystem/lock_system_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
-final String devPassword = utf8.decode([97, 108, 109, 97]);
+final String devPassword = utf8.decode(
+  [77, 97, 99, 105, 76, 97, 99, 105, 67, 105, 99, 107, 111],
+);
+//[97, 108, 109, 97]
 //[77, 97, 99, 105, 76, 97, 99, 105, 67, 105, 99, 107, 111]
 final String stageOnePassword = utf8.decode([99, 105, 115, 99, 111]);
 
@@ -88,13 +91,16 @@ Future<void> initGlobals() async {
   stageFiveEnd = prefs.getInt('stageFiveEnd') ?? 0;
 
   timingData = jsonDecode(prefs.getString('timingData') ?? '{}');
-  if (connectionStatus.length == 0)
-    connectionStatus = List<int>.filled(
-      numberOfTeams!,
-      0,
-      growable: false,
-    );
-  timingData.keys.forEach((element) {
-    connectionStatus[int.parse(element.split('.')[0]) - 1] = 1;
-  });
+  if (connectionStatus.length == 0) {
+    for (int i = 1; i <= numberOfTeams!; i++) {
+      connectionStatus['$i.1'] = 0;
+      connectionStatus['$i.2'] = 0;
+      if (timingData['$i.1'] != null) {
+        connectionStatus['$i.1'] = 1;
+      }
+      if (timingData['$i.2'] != null) {
+        connectionStatus['$i.2'] = 1;
+      }
+    }
+  }
 }
