@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
     return GlobalLoaderOverlay(
       useDefaultLoading: false,
       overlayColor: Color.fromARGB(128, 0, 0, 0),
-      overlayWidget: RawKeyboardListener(
+      overlayWidgetBuilder: (progress) => KeyboardListener(
         focusNode: focus,
         child: IgnorePointer(
           child: Center(
