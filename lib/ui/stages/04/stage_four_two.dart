@@ -20,6 +20,7 @@ import 'package:xterm/xterm.dart';
 Process? serialPort;
 bool checkConfRanOnce = false;
 bool stageComplete = false;
+bool isLoading = false;
 late String commandToConfigure;
 void setCommandCallback(String cmd) {
   commandToConfigure = cmd;
@@ -103,6 +104,16 @@ List<CommandTutorial> stepsToConfigure = [
   ),
 ];
 
+class IgnoreInputHandler implements TerminalInputHandler {
+  @override
+  String? call(TerminalKeyboardEvent event) {
+    if (isLoading) {
+      return utf8.decode([27, 91, 67]); // Right arrow
+    }
+    return null;
+  }
+}
+
 class StageFourTwo extends StatefulWidget {
   const StageFourTwo({super.key});
 
@@ -113,6 +124,12 @@ class StageFourTwo extends StatefulWidget {
 class _StageFourTwoState extends State<StageFourTwo> {
   final terminal = Terminal(
     maxLines: 10000,
+    inputHandler: CascadeInputHandler([
+      IgnoreInputHandler(),
+      KeytabInputHandler(),
+      CtrlInputHandler(),
+      AltInputHandler(),
+    ]),
   );
   final terminalController = TerminalController();
   String lastLine = '';
@@ -145,11 +162,11 @@ class _StageFourTwoState extends State<StageFourTwo> {
 
   void sendCommand(String cmd) {
     terminal.textInput(cmd);
-    terminal.keyInput(TerminalKey.returnKey);
+    serialPort!.stdin.write('\n');
   }
 
   void deleteLastLine() {
-    terminal.keyInput(TerminalKey.keyC, ctrl: true);
+    serialPort!.stdin.write(String.fromCharCode(3));
   }
 
   void nextStageDialog() {
@@ -200,10 +217,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
         .replaceAll(RegExp(r'[ ]{2,}'), ' ')
         .split(' ');
 
-    if (fa00.length != 7 ||
-        fa01.length != 7 ||
-        fa00[0] != 'FastEthernet0/0' ||
-        fa01[0] != 'FastEthernet0/1') {
+    if (fa00[0] != 'FastEthernet0/0' || fa01[0] != 'FastEthernet0/1') {
       showSimpleAlert(
         context: context,
         title: 'Hiba - Érvénytelen konfigurációs választ kaptam',
@@ -211,6 +225,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Próbáljátok meg mégegyszer, ha továbbra sem megy, akkor szóljatok a játékvezetőnek lécci 🥺',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -223,6 +238,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Semmi gond, nagy valószínúséggel csak elgépeltél valamit;\n\nA cím amit beállítottál: ${fa00[1]}\nA cím amit be kellett volna állítani: 192.168.${globals.teamNumber}.254\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -235,6 +251,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Semmi gond, nagy valószínúséggel csak elgépeltél valamit;\n\nA cím amit beállítottál: ${fa01[1]}\nA cím amit be kellett volna állítani: 10.10.10.${globals.teamNumber}\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -257,6 +274,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Próbáljátok meg mégegyszer, ha továbbra sem megy, akkor szóljatok a játékvezetőnek lécci 🥺',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -268,6 +286,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Semmi gond, nagy valószínúséggel csak elgépeltél valamit;\n\nA mask amit beállítottál: ${cidrToMask(fa00Mask[1])}\nA mask amit be kellett volna állítani: 255.255.255.0\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -279,6 +298,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Semmi gond, nagy valószínúséggel csak elgépeltél valamit;\n\nA mask amit beállítottál: ${cidrToMask(fa00Mask[1])}\nA mask amit be kellett volna állítani: 255.255.255.0\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -290,6 +310,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Semmi gond, nagy valószínúséggel csak kimaradt a \'no shutdown\'\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -301,6 +322,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Semmi gond, nagy valószínúséggel csak kimaradt a \'no shutdown\'\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -312,6 +334,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Minden kábel jól be van dugva?\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -323,6 +346,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Minden kábel jól be van dugva?\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -345,6 +369,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             '${lastI > 3 ? "Túl sok van beállítva.\nÚgy tudod kitörölni az összeset, hogy 'no ip route 0.0.0.0 0.0.0.0', és akkor újra tudsz próbálkozni" : "Nincsen egy sem beállítva."}\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -359,6 +384,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Ez az útvonal nem fog minden csomagot elkapni.\nA \'no ip route ${gwRoute[2]} ${gwRoute[3]}\' parancs segítségével ki tudod törölni ezt a hibás útvonalat, majd újrapróbálkozni.\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -370,6 +396,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
             'Ugyan minden csomagot továbbítunk, de nem jó helyre.\n\nAhova továbbítja a csomagokat: ${gwRoute[4]}\nAhova kellene továbbítani a csomagokat: 10.10.10.254\n\nA \'no ip route ${gwRoute[2]} ${gwRoute[3]}\' parancs segítségével ki tudod törölni ezt a hibás útvonalat, majd újrapróbálkozni.\n\nHa dupla ellenőrzés után is fennáll a hiba, akkor nyugodtan kérj segítséget!',
       );
       context.loaderOverlay.hide();
+      isLoading = false;
       return;
     }
 
@@ -381,10 +408,12 @@ class _StageFourTwoState extends State<StageFourTwo> {
 
     if (httpCheckResult == false) {
       context.loaderOverlay.hide();
+      isLoading = false;
       return; // Something is not right, httpcheck function should handle error messages
     }
 
     context.loaderOverlay.hide();
+    isLoading = false;
 
     stageComplete = true;
     serialPort!.kill();
@@ -424,11 +453,13 @@ class _StageFourTwoState extends State<StageFourTwo> {
                     onPressed: () async {
                       if (plinkConnected) return;
                       context.loaderOverlay.show();
+                      isLoading = true;
                       final ports = SerialPort.getPortsWithFullMessages();
                       if (!ports.any(
                         (element) => element.portName == globals.comPort,
                       )) {
                         context.loaderOverlay.hide();
+                        isLoading = false;
                         showSimpleAlert(
                           context: context,
                           title:
@@ -453,6 +484,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                       );
                       if (exitCode != -1) {
                         context.loaderOverlay.hide();
+                        isLoading = false;
                         showSimpleAlert(
                           context: context,
                           title: 'Hiba - Plink nem tud elindulni',
@@ -576,6 +608,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
 
                         if (initTries >= 5) {
                           context.loaderOverlay.hide();
+                          isLoading = false;
                           showSimpleAlert(
                             context: context,
                             title: 'Hiba - Router nem válaszol',
@@ -584,7 +617,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                           );
                           for (int i = 0; i <= 25; i++) {
                             await Future.delayed(Duration(milliseconds: 50));
-                            terminal.keyInput(TerminalKey.returnKey);
+                            serialPort!.stdin.writeln('\n');
                           }
 
                           serialPort?.kill();
@@ -596,7 +629,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
 
                         for (int i = 0; i <= 25; i++) {
                           await Future.delayed(Duration(milliseconds: 50));
-                          terminal.keyInput(TerminalKey.returnKey);
+                          serialPort!.stdin.writeln('\n');
                         }
 
                         globals.sanitizeInput = false;
@@ -611,7 +644,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                         sendCommand('no exec-timeout');
                         sendCommand('end');
                         sendCommand('exit');
-                        terminal.keyInput(TerminalKey.returnKey);
+                        serialPort!.stdin.writeln(' \n');
 
                         globals.sanitizeInput = true;
                         globals.routerInit = true;
@@ -621,15 +654,16 @@ class _StageFourTwoState extends State<StageFourTwo> {
                         await Future.delayed(Duration(milliseconds: 1500));
                         for (int i = 0; i <= 30; i++) {
                           for (int j = 0; j <= Random().nextInt(5); j++) {
-                            terminal.keyInput(TerminalKey.space);
+                            serialPort!.stdin.writeln(' ');
                           }
                           await Future.delayed(Duration(milliseconds: 50));
-                          terminal.keyInput(TerminalKey.returnKey);
+                          serialPort!.stdin.writeln(' \n');
                         }
                         serialPort!.stdin.writeln(' \n');
                       }
 
                       context.loaderOverlay.hide();
+                      isLoading = false;
                     },
                   ),
                 )
@@ -678,6 +712,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                       icon: Icon(Icons.checklist),
                       onPressed: () async {
                         context.loaderOverlay.show();
+                        isLoading = true;
                         bool httpCheckResult = await runHttpConnectivityCheck(
                           context,
                           destination:
@@ -687,10 +722,12 @@ class _StageFourTwoState extends State<StageFourTwo> {
 
                         if (httpCheckResult == false) {
                           context.loaderOverlay.hide();
+                          isLoading = false;
                           return; // Something is not right, httpcheck function should handle error messages
                         }
 
                         context.loaderOverlay.hide();
+                        isLoading = false;
                         nextStageDialog();
                       },
                     ),
@@ -707,6 +744,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                       icon: Icon(Icons.checklist),
                       onPressed: () {
                         context.loaderOverlay.show();
+                        isLoading = true;
                         checkConfRanOnce = true;
                         checkConfiguration();
                       },
@@ -758,6 +796,7 @@ class _StageFourTwoState extends State<StageFourTwo> {
                           setState(() {
                             if (currentStep == stepsToConfigure.length - 1) {
                               context.loaderOverlay.show();
+                              isLoading = true;
                               checkConfRanOnce = true;
                               checkConfiguration();
                             } else {
