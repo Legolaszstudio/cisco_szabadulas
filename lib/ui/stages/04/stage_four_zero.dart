@@ -83,10 +83,10 @@ class _StageFourState extends State<StageFour> {
       De szerencsére a másik zúgó csoda eszköz, melynek becses neve Router, pontosan ezt a feladatot látja el, különböző hálózatokat köt össze.
       Mivel nem szeretünk élesben tesztelni, ezért építsünk fel egy picike teszt hálózatot a routerünkkel és a két géppel...
       
-      Ehhez romboljunk le mindent amit eddig bedugtunk, összekötöttünk... 😅
+      Ehhez romboljunk le mindent amit eddig bedugtunk, összekötöttünk... (A szekrénynél, és csak óvatosan) 😅
       Bocsánat, tényleg sajnálom 😭
       
-      Ha kész vagyunk, akkor lépjünk csak tovább;
+      Ha kész vagyunk, akkor lépjünk tovább;
       ''',
                 style: TextStyle(fontSize: 18),
                 textAlign: TextAlign.center,

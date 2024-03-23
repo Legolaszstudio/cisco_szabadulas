@@ -42,7 +42,7 @@ A gépektől a szekrényig vannak kábelek a falba, így nekünk szerencsére ne
 
 1. Dugjuk át gépünket a szekrényhez vezető (falban található) kábelbe.
 Jelen pillanatban nagy valószínűséggel a NET feliratú aljzatba van dugva.
-Innen kellene átdugni a piros (RACK feliratú) aljzatba. (Jegyezzük fel a számot ahova bedugtuk!)
+Innen kellene átdugni a piros (RACK feliratú) aljzatba. (Jegyezzük meg a számot ahova bedugtuk!)
 ''',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 18),
@@ -59,7 +59,7 @@ Innen kellene átdugni a piros (RACK feliratú) aljzatba. (Jegyezzük fel a szá
           SizedBox(height: 20),
           Text(
             '''
-Az alábbi eszközök a tietek, de ez ott is fel lesz matricázva;
+Az alábbi eszközök a tietek, de ez ott is fel lesz matricázva, illetve a megfelelő színnel jelölve;
 ''',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18),
@@ -77,8 +77,8 @@ Az alábbi eszközök a tietek, de ez ott is fel lesz matricázva;
           Text(
             '''
 Most a fentebb található, 'sok lyukú' eszközre van szükségetek, őt úgy hívják, hogy switch.
-Feladata, hogy összekösse a sok számítógépet. Jelen esetben a mi kettő gépünket.
-A középen található 'H' jelölésű elosztó (patch) panel a falba bedugott kábel másik vége.
+Feladata, hogy összekössön sok számítógépet. Jelen esetben a mi kettő gépünket.
+A középen található 'H' jelölésű elosztó (patch) panelen található rack aljzatba bedugott kábel másik vége.
 ''',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18),

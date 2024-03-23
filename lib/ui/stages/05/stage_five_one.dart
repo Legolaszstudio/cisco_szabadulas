@@ -61,7 +61,7 @@ class _StageFiveOneState extends State<StageFiveOne> {
             child: Text(
               '''
 Csatlakozzunk a routerhez!
-Így már midnen gépünk képes lesz elérni a többi hálózatot.
+Így már minden gépünk képes lesz elérni a többi hálózatot.
 
 Dugjuk be a switchünk 'uplink' portját a routerünk f0/0 portjába!''',
               style: TextStyle(fontSize: 18),

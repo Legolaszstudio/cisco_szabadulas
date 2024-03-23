@@ -9,7 +9,7 @@ import '../lockSystem/lock_system_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 final String devPassword = utf8.decode(
-  [77, 97, 99, 105, 76, 97, 99, 105, 67, 105, 99, 107, 111],
+  [97, 108, 109, 97],
 );
 //[97, 108, 109, 97]
 //[77, 97, 99, 105, 76, 97, 99, 105, 67, 105, 99, 107, 111]
@@ -103,4 +103,9 @@ Future<void> initGlobals() async {
       }
     }
   }
+}
+
+Future<void> resetPrefs() async {
+  await prefs.clear();
+  await initGlobals();
 }
