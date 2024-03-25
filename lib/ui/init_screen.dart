@@ -1,5 +1,6 @@
 import 'package:cisco_szabadulas/helpers/check_conf/http_server.dart';
 import 'package:cisco_szabadulas/helpers/simple_alert.dart';
+import 'package:cisco_szabadulas/lockSystem/lock_system_screen.dart';
 import 'package:cisco_szabadulas/ui/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -105,6 +106,31 @@ class _InitScreenState extends State<InitScreen> {
                             globals.httpServerVer = 0;
                           }
 
+                          globals.teamNumber = int.parse(_teamNumberCtrl.text);
+                          globals.prefs.setInt(
+                            'teamNumber',
+                            int.parse(_teamNumberCtrl.text),
+                          );
+
+                          globals.numberOfTeams =
+                              int.parse(_numberOfTeamsCtrl.text);
+                          globals.prefs.setInt(
+                            'numberOfTeams',
+                            int.parse(_numberOfTeamsCtrl.text),
+                          );
+
+                          if (globals.teamNumber == -1) {
+                            context.loaderOverlay.hide();
+
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => LockSystemScreen(),
+                              ),
+                            );
+                            return;
+                          }
+
                           final ports = SerialPort.getPortsWithFullMessages();
                           if (!ports.any(
                                 (element) =>
@@ -122,11 +148,6 @@ class _InitScreenState extends State<InitScreen> {
                             return;
                           }
 
-                          globals.teamNumber = int.parse(_teamNumberCtrl.text);
-                          globals.prefs.setInt(
-                            'teamNumber',
-                            int.parse(_teamNumberCtrl.text),
-                          );
                           globals.pcNumber = int.parse(_pcNumberCtrl.text);
                           globals.prefs.setInt(
                             'pcNumber',
@@ -141,13 +162,6 @@ class _InitScreenState extends State<InitScreen> {
                           globals.prefs.setString(
                             'networkInterface',
                             _interfaceNameCtrl.text,
-                          );
-
-                          globals.numberOfTeams =
-                              int.parse(_numberOfTeamsCtrl.text);
-                          globals.prefs.setInt(
-                            'numberOfTeams',
-                            int.parse(_numberOfTeamsCtrl.text),
                           );
 
                           globals.comPort = _comPortCtrl.text;

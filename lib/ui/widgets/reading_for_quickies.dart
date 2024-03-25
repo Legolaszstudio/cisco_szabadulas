@@ -43,7 +43,7 @@ A maszkot szokták ezért úgy nevezett CIDR jelöléssel is jelölni, ami nem s
 255.255.255.0 = /24 = 11111111.11111111.11111111.00000000
 255.255.192.0 = /18 = 11111111.11111111.11000000.00000000
 
-A maszk egy bináris és műveletet hajt végre az ip címmel, és az eredményül kapjuk meg a hálózat címét.
+A maszk egy bináris "és" műveletet hajt végre az ip címmel, és az eredményül kapjuk meg a hálózat címét.
 Az és művelet egy bitenkénti és művelet, tehát ha az egyik bit 1, a másik 0, akkor az eredmény 0, ha mindkettő 1, akkor 1.
 pl: /24 esetén
 11111111.11111111.11111111.00000000 = 255.255.255.0
@@ -62,7 +62,7 @@ Ilyen privát cím tartományok a:
 Az iskola a 10-es hálózatot használja; 10.(elosztó szám).(terem szám).(gép szám)
 
 Létezik IPv6 is, mivel 2^32 cím az már kevés volt.
-Az IPv6 ami már 128 bittel dologzik tehát 2^128 cím, ami már bőséges.
+Az IPv6 már 128 bittel dologzik, tehát 2^128 címet tud kihasználni, ami már bőséges mindenre is.
 De ennél többet nem mondok, nézettek utána, ha érdekel ;)
 ''',
               style: TextStyle(fontSize: 15),
@@ -75,7 +75,7 @@ De ennél többet nem mondok, nézettek utána, ha érdekel ;)
             padding: const EdgeInsets.only(left: 50.0, right: 10),
             child: Text(
               '''
-Otthon be van állítva a routeren DHCP, azaz a Dynamic Host Configuration Protocoll, ez felel azért, hogy amikor bedugod a gépedet akkor a router elmondja neki, hogy mi lesz az ő címe, maszkja és merre találja az átjárót.
+Otthon be van állítva a routeren DHCP, azaz a Dynamic Host Configuration Protocoll, ő felel azért, hogy amikor bedugod a gépedet akkor a router elmondja neki, hogy mi lesz az ő címe, maszkja és merre találja az átjárót.
 ''',
               style: TextStyle(fontSize: 15),
             ),
@@ -88,9 +88,10 @@ Otthon be van állítva a routeren DHCP, azaz a Dynamic Host Configuration Proto
             padding: const EdgeInsets.only(left: 50.0, right: 10),
             child: Text(
               '''
-A STP, azaz Spanning Tree Protocoll miatt, enek az a feladata, hogy megakadályoza, hogy hurok alakuljon ki a hálózatban, azaz valahol valami kétszer van bedugva, vagy vissza van dugva önmagába.
+A STP, azaz Spanning Tree Protocoll miatt, enek az a feladata, hogy megakadályoza, hogy hurok alakuljon ki a hálózatban, azaz valahol valami kétszer legyen bedugva, vagy vissza legyen dugva önmagába.
 Erre azért van szükség, hogy ne alakuljon ki végtelen hurok, ahol a switch saját magának válaszolgat.
-Illetve azért is, hogyha több útvonal létezik, akkor kiválassza a legmegfelelőbbet.
+
+Illetve azért is, hogy több útvonal esetén redundanciát valósítson meg, azaz, ha az egyik útvonal valami miatt megszakad, akkor átváltson a másikra.
 ''',
               style: TextStyle(fontSize: 15),
             ),
@@ -105,7 +106,7 @@ Illetve azért is, hogyha több útvonal létezik, akkor kiválassza a legmegfel
               '''
 A 'netsh interface ip dump' parancsot futattja le egy parancssorban, nyugodtan próbáld ki te is ;)
 Nyiss egy parancssort, írd be a parancsot, enter és láss csodát
-Itt látjuk az ip címeket, maskokat és a gateway-eket is
+Itt látjuk az ip címeket, maszkokat és a gateway-eket is
 ''',
               style: TextStyle(fontSize: 15),
             ),
@@ -118,6 +119,8 @@ Itt látjuk az ip címeket, maskokat és a gateway-eket is
             child: Text(
               '''
 A háttérben fut egy webszerver a 8080-as porton, nyiss egy böngészőt, és írd be, hogy "localhost:8080" (idézőjelek nélkül).
+(Ez csak a második fázistól működik...)
+
 A program azt nézi, hogy ez a weboldal a megfelelő csapat és gép számmal megnyílik-e.
 ''',
               style: TextStyle(fontSize: 15),
@@ -160,7 +163,7 @@ Illetve amikor kiépül a kapcsolat, akkor beállítunk pár dolgot;
 A router nevét CsapatXRouter-re.
 A parancssorba való kiiratást átállítjuk szinkronos-ra, azaz ha valami üzenet érkezik, akkor az új sorba íródik.
 Kikapcsoljuk az automatikus kijelentkezést, így ha sokáig nem írtok be semmit, akkor sem fog kiléptetni a router.
-Illetve kikapcsoljuk a DNS-t (névfeloldást), hogy az elgépelt parancsokat ne weboldalként próbálja meg értelmezni.
+Illetve kikapcsoljuk a DNS lookup-ot (névfeloldást), hogy az elgépelt parancsokat ne weboldalként próbálja meg értelmezni.
 ''',
               style: TextStyle(fontSize: 15),
             ),

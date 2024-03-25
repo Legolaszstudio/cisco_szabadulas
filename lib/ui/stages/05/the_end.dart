@@ -37,7 +37,7 @@ class _TheEndState extends State<TheEnd> {
               textAlign: TextAlign.center,
             ),
             Text(
-              'Legyőztétek a gonosz Bátrói csoportot, az újraindítás kiűzte őket a rendszerbe (egyelőre...)',
+              'Legyőztétek a gonosz Bátrói csoportot, az újraindítás kiűzte őket a rendszerből (egyelőre...)',
               style: TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),

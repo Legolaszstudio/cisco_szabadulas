@@ -66,9 +66,9 @@ class _LockSystemDebugMenuState extends State<LockSystemDebugMenu> {
             },
           ),
         ),
-        for (int i = 0; i < globals.numberOfTeams!; i++)
+        for (int i = 1; i <= globals.numberOfTeams!; i++)
           CheckboxListTile(
-            title: Text('Ignore Team ${i + 1}'),
+            title: Text('Ignore Team $i'),
             value: ls_screen.connectionStatus['$i.1'] == -1 &&
                 ls_screen.connectionStatus['$i.2'] == -1,
             onChanged: (newValue) {
