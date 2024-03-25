@@ -15,8 +15,6 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:serial_port_win32/serial_port_win32.dart';
 import 'package:xterm/xterm.dart';
 
-//FIXME: Ignore input while loading
-
 Process? serialPort;
 bool checkConfRanOnce = false;
 bool stageComplete = false;

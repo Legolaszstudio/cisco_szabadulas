@@ -1,5 +1,6 @@
 import 'package:cisco_szabadulas/helpers/check_conf/http_client.dart';
 import 'package:cisco_szabadulas/helpers/check_conf/is_ip_conf_right.dart';
+import 'package:cisco_szabadulas/helpers/check_conf/ping_check.dart';
 import 'package:cisco_szabadulas/helpers/debug_menu/debug_menu.dart';
 import 'package:cisco_szabadulas/helpers/globals.dart' as globals;
 import 'package:cisco_szabadulas/helpers/simple_alert.dart';
@@ -145,13 +146,26 @@ Ha jól csináltunk mindent, mind két gépen/géppel, akkor az alábbi ellenőr
                   destination: 'http://$otherPcIp/',
                   stageNum: 2,
                 );
-                context.loaderOverlay.hide();
 
                 if (httpCheckResult == false) {
-                  //TODO: Check switch ip addr too
+                  context.loaderOverlay.hide();
                   return; // Something is not right, httpcheck function should handle error messages
                 }
 
+                PingSuccess pingResult =
+                    await pingCheck('192.168.${globals.teamNumber}.250');
+                if (pingResult.successRate < 50) {
+                  context.loaderOverlay.hide();
+                  showSimpleAlert(
+                    context: context,
+                    title: 'Hiba - Nem sikerült a switchet pingelni',
+                    content:
+                        'A másik gépet elérem, de a switchet nem...\nEz valami furcsa trükközés lehet, lécci ne 😠!\n\nRészletek:\n${pingResult.errors.join("\n")}',
+                  );
+                  return;
+                }
+
+                context.loaderOverlay.hide();
                 globals.prefs.setDouble('currentStage', 2.2);
                 globals.currentStage = 2.2;
 

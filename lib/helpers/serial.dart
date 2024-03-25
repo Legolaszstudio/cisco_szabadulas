@@ -144,5 +144,11 @@ bool isUnsafeCommand(
     );
     return true;
   }
+  if (cmd.startsWith('int') && fullCmd.contains('.')) {
+    terminal.write(
+      '\r\nSubinterfaces are disabled!\n\r',
+    );
+    return true;
+  }
   return false;
 }
