@@ -21,7 +21,7 @@ class _InitScreenState extends State<InitScreen> {
   TextEditingController _interfaceNameCtrl = TextEditingController(
     text: globals.networkInterface,
   );
-  TextEditingController _numberOfTeamsCtrl = TextEditingController(text: '7');
+  TextEditingController _numberOfTeamsCtrl = TextEditingController(text: '4');
   TextEditingController _comPortCtrl = TextEditingController(text: 'COM3');
 
   @override
