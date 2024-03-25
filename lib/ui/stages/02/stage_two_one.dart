@@ -148,6 +148,7 @@ Ha jól csináltunk mindent, mind két gépen/géppel, akkor az alábbi ellenőr
                 context.loaderOverlay.hide();
 
                 if (httpCheckResult == false) {
+                  //TODO: Check switch ip addr too
                   return; // Something is not right, httpcheck function should handle error messages
                 }
 
