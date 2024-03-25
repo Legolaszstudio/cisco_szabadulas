@@ -130,10 +130,10 @@ class _LockSystemScreenState extends State<LockSystemScreen> {
       });
     }
     return Scaffold(
-      body: RawKeyboardListener(
+      body: KeyboardListener(
         focusNode: FocusNode()..requestFocus(),
-        onKey: (event) {
-          if (event is RawKeyDownEvent && event.character == ' ')
+        onKeyEvent: (event) {
+          if (event is KeyDownEvent && event.character == ' ')
             showDebugMenu(setStateCallback: () {
               setState(() {
                 print('Lock System setState called');

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Cisco Szabadulas"
-#define MyAppVersion "1.1.1"
+#define MyAppVersion "1.1.2"
 #define MyAppPublisher "NovySoftware"
 #define MyAppURL "https://novy.vip"
 #define MyAppExeName "cisco_szabadulas.exe"
